@@ -1,0 +1,444 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #222;
+  color: #EEE;
+  --vm: calc( (1vw + 1vh) / 2 );
+  user-select: none;
+  font-family: "Liberation Serif", "Times New Roman", serif;
+  font-size: 18px;
+}
+button, input {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+body * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body *::before, body *::after {
+  content: "";
+  display: block;
+  position: absolute;
+  box-sizing: border-box;
+}
+
+body button {
+  padding: 2px 10px;
+  background: #433;
+  border: 1px solid #766;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px #322;
+  color: #DCC;
+}
+body button:hover {
+  background: #755;
+}
+
+ctrl {
+  color: #210;
+  background: #666;
+  box-shadow: inset 0 0 50px #222, 10px 10px 50px #000;
+  display: block;
+  position: absolute;
+  top: calc(var(--vm)*5);
+  bottom: calc(var(--vm)*5);
+  left: calc(var(--vm)*5);
+  width: 230px;
+  padding: 30px;
+  border-radius: 6px;
+  z-index: 10;
+}
+#avaliable {
+  position: relative;
+  left: -15px;
+  width: 200px;
+  height: 470px;
+  margin: 15px 0;
+  font-size: 100px;
+}
+
+gold b {
+  text-shadow: 1px 1px 2px #000;
+}
+act {
+  display: block;
+  margin: 5px -35px;
+  white-space: nowrap;
+  transform: scale(.8, 1);
+}
+act button {
+  position: relative;
+  padding: 2px 8px;
+  margin-left: -1px;
+  border-radius: 0;
+}
+act button:first-child {
+  border-radius: 8px 0 0 8px;
+}
+act button:last-child {
+  border-radius: 0 8px 8px 0;
+}
+act button.active {
+  background: #06A;
+  box-shadow: 0 0 12px #07F, 0 0 14px #07F;
+  border: 1px solid #8CF;
+  z-index: 2;
+}
+magic button {
+  display: block;
+}
+
+article {
+  background: #730;
+  background-image:
+    radial-gradient(at 15% 25%,
+      #420 00%, transparent 01%,
+      #420 05%, transparent 05.1%,
+      #420 10%, transparent 10.1%,
+      #420 15%, transparent 15.1%,
+      #420 20%, transparent 20.1%,
+      #420 25%, transparent 25.1%
+    ),
+    radial-gradient(at -5% 78%,
+      #420 00%, transparent 01%,
+      #420 05%, transparent 05.1%,
+      #420 10%, transparent 10.1%,
+      #420 15%, transparent 15.1%,
+      #420 20%, transparent 20.1%,
+      #420 25%, transparent 25.1%
+    );
+  background-size: 500vw 50vh;
+  border-radius: 6px;
+  box-shadow: 10px 10px 50px #000;
+  font-size: 100px;
+  display: block;
+  position: absolute;
+  top: calc(var(--vm)*5);
+  bottom: calc(var(--vm)*5);
+  right: calc(var(--vm)*5);
+  width: calc(100vw - var(--vm)*15 - 230px);
+  overflow: auto;
+  z-index: 5;
+}
+
+article div, #avaliable {
+  filter: drop-shadow(.01em .01em .02em rgba(0,0,0,.9));
+}
+article div, article ul {
+  position: absolute;
+  width: calc(var(--pW)*100px);
+  height: calc(var(--pH)*100px);
+  transition: opacity 1s;
+}
+article.hide div, article.hide ul {
+  opacity: 0;
+}
+
+space {
+  position: absolute;
+  display: block;
+  width: 90px;
+  height: 90px;
+  border-radius: 15px;
+  --color: #FC0;
+  --blur: 2px;
+  border: 1px solid var(--color);
+  filter: blur(3px)
+          drop-shadow(0 0 0 var(--color))
+          drop-shadow(0 0 0 var(--color))
+          drop-shadow(0 0 0 var(--color));
+  opacity: 0;
+  z-index: 0;
+  transition: 2s;
+}
+space:hover {
+  border: 3px solid #FFF;
+  filter: blur(var(--blur))
+          drop-shadow(0 0 8px var(--color))
+          drop-shadow(0 0 8px var(--color))
+          drop-shadow(0 0 8px var(--color));
+  opacity: 1;
+  transition: 0s;
+}
+space.valid {
+  border: 10px solid #FFF;
+  --color: #0AF;
+  --blur: 4px;
+}
+space.invalid {
+  --color: #F04;
+  --blur: 4px;
+}
+space.valid:hover, space.invalid:hover {
+  border: 10px solid #FFF;
+}
+
+article ul {
+  font-size: 20px;
+  z-index: 10;
+  pointer-events: none;
+}
+article ul > * {
+  position: absolute;
+  transform: translate(-.5em, -.5em);
+}
+
+article p, #avaliable p {
+  position: absolute;
+  width: 119px;
+  height: 119px;
+  margin: -.1em 0 0 -.1em;
+  --N: 8% 8%;
+  --E: 92% 8%;
+  --S: 92% 92%;
+  --W: 8% 92%;
+  clip-path: polygon(var(--N), var(--E), var(--S), var(--W));
+  z-index: 2;
+}
+
+p.disabled {
+  filter: blur(.02em) grayscale(1);
+}
+
+#avaliable p {
+  transform: rotate(9deg) scale(.666);
+}
+#avaliable p.dragging {
+  transform: none;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#avaliable button {
+  font-size: 16px;
+  line-height: 25px;
+  width: 28px;
+  padding: 3px 0px 0px 0px;
+  border-radius: 50%;
+  border: none;
+  text-align: center;
+  box-shadow: -1px -1px 2px rgba(255,255,255,.6);
+  background: #222;
+  color: #FC0;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 5;
+}
+#avaliable button:hover {
+  background: #FC0 radial-gradient(#FC0, #FC0, #222, #222);
+  color: #222;
+}
+
+p f {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: blur(2px);
+  mix-blend-mode: hard-light;
+  z-index: 50;
+}
+f::before, f::after {
+  width: 100%;
+  height: 100%;
+  top: -2px;
+  left: -2px;
+  clip-path: polygon(var(--N), var(--E), var(--S), var(--W));
+}
+f::after {
+  top: 2px;
+  left: 2px;
+}
+
+p.building {
+  background: 10px 10px linear-gradient(-45deg, #777, #999);
+  background-size: 20px 20px;
+}
+p.woods    {
+  background: #874;
+  background-size: .75em .75em;
+}
+p.cavern   { background: #544 }
+
+p f { background: #333 }
+p f::before { background: #BBB }
+p f::after  { background: rgba(68,68,68,.5) }
+
+#game .Nm { --N: 08% 08%, 40% 08%,  45%  00%,  55%  00%, 60% 08% }
+#game .Nf { --N: 08% 08%, 40% 08%,  45%  16%,  55%  16%, 60% 08% }
+#game .Sm { --S: 92% 92%, 60% 92%,  55% 100%,  45% 100%, 40% 92% }
+#game .Sf { --S: 92% 92%, 60% 92%,  55%  84%,  45%  84%, 40% 92% }
+#game .Wm { --W: 08% 92%, 08% 60%,  00%  55%,  00%  45%, 08% 40% }
+#game .Wf { --W: 08% 92%, 08% 60%,  16%  55%,  16%  45%, 08% 40% }
+#game .Em { --E: 92% 08%, 92% 40%, 100%  45%, 100%  55%, 92% 60% }
+#game .Ef { --E: 92% 08%, 92% 40%,  84%  45%,  84%  55%, 92% 60% }
+
+map {
+  display: grid;
+  grid-template-columns: 1em 1em 1em 1em 1em 1em 1em;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 20px;
+}
+map > * {
+  display: block;
+  position: relative;
+  width: 1em;
+  height: 1em;
+  /* background: linear-gradient(-45deg, #F00, transparent, transparent, transparent, #00F); */
+}
+map w {
+  z-index: 10;
+}
+
+.building map :is(w, w i)::before, .building map :is(w, w i)::after {
+  width: .5em;
+  height: .5em;
+  border: 1px solid #422;
+  border-top: 1px solid #966;
+  border-left: 1px solid #966;
+  background: linear-gradient(-45deg, #522, #855);
+}
+.building map :is(w, w i)::after {
+  left: .5em;
+}
+.building map w i::before, .building map w i::after {
+  top: .5em;
+}
+
+.woods map w i, .woods map :is(w, w i)::before, .woods map :is(w, w i)::after {
+  border-radius: 50%;
+  position: absolute;
+  background: radial-gradient(at 30% 30%, #480, #010);
+}
+.cavern map w i, .cavern map :is(w, w i)::before, .cavern map :is(w, w i)::after {
+  border-radius: .2em;
+  position: absolute;
+  background: radial-gradient(at 30% 30%, #433, #111);
+}
+
+:is(.woods, .cavern) map w::before {
+  width: .6em;
+  height: .7em;
+  top: -.1em;
+  left: -.1em;
+}
+:is(.woods, .cavern) map w::after {
+  width: .5em;
+  height: .5em;
+  top: .5em;
+}
+:is(.woods, .cavern) map w i {
+  width: .7em;
+  height: .5em;
+  left: .4em;
+}
+.woods map w i {
+  z-index: 2;
+}
+:is(.woods, .cavern) map w i::before {
+  top: .4em;
+  left: -.1em;
+  width: .4em;
+  height: .4em;
+}
+:is(.woods, .cavern) map w i::after {
+  top: .5em;
+  left: .1em;
+  width: .6em;
+  height: .6em;
+}
+
+e i {
+  position: absolute;
+  border-radius: 1em;
+  width: var(--size);
+  height: var(--size);
+  transform: translate(calc( (1em - var(--size)) / 2 ), calc( (1em - var(--size)) / 2 ));
+  background: radial-gradient(at 30% 30%, #F20, #100);
+}
+
+.e1 { --size: 0.40em }
+.e2 { --size: 0.50em }
+.e3 { --size: 0.60em }
+.e4 { --size: 0.65em }
+.e5 { --size: 0.70em }
+.e6 { --size: 0.75em }
+.e7 { --size: 0.80em }
+.e8 { --size: 0.85em }
+.e9 { --size: 1.00em }
+
+.e7 i::after {
+  top: .2em;
+  left: .2em;
+  width: .4em;
+  height: .4em;
+  border-radius: 1em;
+  border: 1.5px dotted rgba(0,0,0,.7);
+}
+
+.e8 i::before {
+  top: .225em;
+  left: .225em;
+  width: .4em;
+  height: .4em;
+  border-radius: 1em;
+  border: 1.5px solid #EEE;
+  filter: blur(1px);
+}
+.e8 i::after {
+  top: .225em;
+  left: .225em;
+  width: .4em;
+  height: .4em;
+  border-radius: 1em;
+  border: 1.5px dotted #555;
+}
+
+.e9 i::before {
+  top: .25em;
+  left: .25em;
+  width: .5em;
+  height: .5em;
+  border-radius: 1em;
+  border: 1.5px solid #FF0;
+  filter: blur(1px);
+}
+.e9 i::after {
+  top: .3em;
+  left: .3em;
+  width: .4em;
+  height: .4em;
+  border-radius: 1em;
+  border: 1.5px dotted #600;
+}
+
+u i, m i {
+  position: absolute;
+  border-radius: 1em;
+  width: .55em;
+  height: .55em;
+  transform: translate(.225em, .225em);
+  background: radial-gradient(at 30% 30%, #27C, #002);
+}
+
+m i {
+  background: radial-gradient(at 30% 30%, #CCC, #000);
+  box-shadow: 0 0 .3em #FE0, 0 0 .3em #FE0;
+}
+
+grid {
+  display: block;
+  position: absolute;
+  top: .2em;
+  left: .2em;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.15em;
+  border: 2px dotted #322;
+  filter: drop-shadow(-1px -1px #666);
+}

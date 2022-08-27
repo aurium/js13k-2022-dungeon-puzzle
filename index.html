@@ -1,0 +1,53 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>JS13kGames - Dungeon Puzzle</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="game-select.css" />
+</head>
+<body id="game">
+  <bg>
+    <modal>
+      <h1>Dungeon Puzzle</h1>
+      <p>Select the game dificult:</p>
+      <lvl-opts>
+        <button onclick="initMap('easy')">Easy</button>
+        <button onclick="initMap('medium')">Medium</button>
+        <button onclick="initMap('hard')">Hard</button>
+        <button onclick="$('lvl-opts').style.display='none';$('conf-lvl').style.display='block'">Custom</button>
+      </lvl-opts>
+      <conf-lvl style="display:none">
+        <label><span>Width:</span><input id="conf-width" value="13" type="number" min="5"></label>
+        <label><span>Height:</span><input id="conf-height" value="7" type="number" min="5"></label>
+        <label><span>Enemy Chance:</span><input id="conf-enemy-chance" value="15" type="number" min="1">%</label>
+        <button onclick="initMap()">Play it!</button>
+      </conf-lvl>
+    </modal>
+  </bg>
+  <ctrl>
+    <gold></gold>
+    <act>
+      <button>craven</button><button>defensive</button><button>aggressive</button>
+    </act>
+    <div id="avaliable"></div>
+    <magic>
+      <h2>Magic</h2>
+      <button>Regenerate</button>
+      <button>Freeze</button>
+      <button>Firewall</button>
+    </magic>
+    <button onclick="gameOver()">Game Over</button>
+  </ctrl>
+  <article class="hide">
+    <div></div>
+    <ul></ul>
+  </article>
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/stats.js@master/build/stats.js"></script><!-- DEBUG -->
+  <script src="constants.js"></script>
+  <script src="mkel.js"></script>
+  <script src="piece.js"></script>
+  <script src="ui.js"></script>
+  <script src="init-map.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
