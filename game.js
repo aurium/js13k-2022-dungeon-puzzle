@@ -1,16 +1,18 @@
 
 /* INI DEBUG */
-const debugStats = Stats ? new Stats() : {
-  dom: document.createElement('button'),
-  begin() { },
-  end() { },
+let debugStats = { begin(){}, end(){} }
+const scriptEl = document.createElement('script')
+scriptEl.onload = ()=> {
+  debugStats = Stats ? new Stats() : {
+    dom: document.createElement('button'),
+    begin() { },
+    end() { },
+  }
+  document.body.appendChild(debugStats.dom)
 }
-document.body.appendChild(debugStats.dom)
+scriptEl.src = 'https://cdn.jsdelivr.net/gh/mrdoob/stats.js@master/build/stats.js'
+document.body.appendChild(scriptEl)
 /* END DEBUG */
-
-let gold = 0
-let act = 'defensive'
-const tableTop = $('article div')
 
 let inc = .1
 function animate() {
@@ -29,7 +31,7 @@ function animate() {
   debugStats.end() // DEBUG
 }
 
-console.log('Game ON!')
+log('Game ON!')
 animate()
 
 window.gameOver = function() {

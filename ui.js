@@ -13,7 +13,7 @@ const tableEl = $('article')
 const puzzleLayerEl = $('article > div')
 const walkersLayerEl = $('article > ul')
 
-console.log('UI!')
+log('UI!')
 
 function onWinResize() {
   tableEl.classList.remove('hide')

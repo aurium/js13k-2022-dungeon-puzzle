@@ -59,13 +59,27 @@ if ! $DEBUG; then
   " *.html
 fi
 
+terser_args=(
+  --compress
+  --source-map content=game.full.js.map,url=game.js.map
+  --output game.js
+)
+if ! $DEBUG; then
+  terser_args=(
+    "${terser_args[@]}"
+    --mangle 'toplevel,reserved=["initMap"]'
+    --mangle-props regex=/_$/
+  )
+fi
+echo "${terser_args[@]}" >&2
+
 # Minify JS
-sed -r 's/const/let/' game.full.js |
-terser --compress \
-       --source-map content=game.full.js.map,url=game.js.map \
-       --mangle toplevel \
-       --mangle-props regex=/_$/ \
-       --output game.js
+(
+  $DEBUG               \
+  && cat game.full.js  \
+  || sed -r 's/const/let/' game.full.js
+) |
+terser "${terser_args[@]}"
 
 rm game.full.*
 
@@ -74,7 +88,7 @@ CSS=$(tr -s '\n' ' ' < style.css)
 echo "$CSS" | sed -r '
   s!/\*([^*]|\*[^/])*\*/!!g;
   s!; *\}!}!g;
-  s! *([:;,{}]) *!\1!g;
+  s! *([;,{}]) *!\1!g;
   s!\( *!(!g;
   s! *\)!)!g;
 ' > style.css

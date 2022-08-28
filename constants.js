@@ -6,6 +6,11 @@ const rnd = (mult=1)=> Math.random()*mult
 const arrRnd = (arr)=> arr[floor(rnd(arr.length))]
 const $ = (sel)=> document.querySelector(sel)
 const $$ = (sel)=> [...document.querySelectorAll(sel)]
+const log = console.log // DEBUG
+
+let gold = 0
+let act = 'defensive'
+const tableTop = $('article div')
 
 const MAPS = {
   N: [
