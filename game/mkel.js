@@ -29,6 +29,4 @@ mkEl.extend = function extendElement(el) {
   return el
 }
 
-log('MKEL!')
-
 window.mkEl = mkEl

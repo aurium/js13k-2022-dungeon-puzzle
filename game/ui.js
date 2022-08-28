@@ -13,8 +13,6 @@ const tableEl = $('article')
 const puzzleLayerEl = $('article > div')
 const walkersLayerEl = $('article > ul')
 
-log('UI!')
-
 function onWinResize() {
   tableEl.classList.remove('hide')
   const tableW = tableEl.clientWidth
@@ -42,6 +40,7 @@ window.addEventListener('mousemove', dragAvaliablePiece)
 let dragingPiece = null
 function initDragAvaliablePiece(ev) {
   dragingPiece = this
+  log('Init drag piece', dragingPiece.className, dragingPiece.N)
   dragingPiece.style.transition = 'transform .6s'
   dragingPiece.classList.add('dragging')
   dragingPiece.drag(ev.pageX, ev.pageY)
@@ -49,24 +48,38 @@ function initDragAvaliablePiece(ev) {
 
 function endDragAvaliablePiece(ev) {
   if (!dragingPiece) return 0
-  dragingPiece.drag()
-  dragingPiece.style.transition = '.6s'
+  log('End drag piece', dragingPiece.className)
+  if (canPiceFit(dragingPiece, ...lastTablePos)) {
+    log(`Placing ${dragingPiece.className} at ${lastTablePos}`)
+    dragingPiece.placePiece(...lastTablePos)
+  } else {
+    dragingPiece.drag()
+    dragingPiece.style.transition = '.6s'
+  }
   dragingPiece.classList.remove('dragging')
   dragingPiece = null
+  lastTablePos = []
 }
 
 function dragAvaliablePiece(ev) {
   if (!dragingPiece) return 0
+  //log('Draging piece', ~~(ev.pageX/50)*50, ~~(ev.pageY/50)*50)
   dragingPiece.drag(ev.pageX, ev.pageY)
 }
 
 let overPlace = [0, 0]
-function mouseover(x, y) {
-  mapSpaces[y][x].className = arrRnd(['', 'valid', 'invalid'])
+let lastTablePos = []
+function mouseoverTableTile(x, y) {
+  if (dragingPiece) {
+    lastTablePos = [x, y]
+    mapSpaces[y][x].className = canPiceFit(dragingPiece, x, y) ? 'valid' : 'invalid'
+  } else {
+    mapSpaces[y][x].className = ''
+  }
   overPlace = [x, y]
 }
 
-function mouseout(x, y) {
+function mouseoutTableTile(x, y) {
   overPlace = [0, 0]
 }
 

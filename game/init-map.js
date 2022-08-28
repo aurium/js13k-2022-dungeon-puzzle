@@ -97,8 +97,8 @@ function initMap(level) {
       if (!mapSpaces[y]) mapSpaces[y] = []
       mapSpaces[y][x] = mkEl('space', {
         parent: tableTop,
-        onmouseover() { mouseover(x, y) },
-        onmouseout() { mouseout(x, y) },
+        onmouseover() { mouseoverTableTile(x, y) },
+        onmouseout() { mouseoutTableTile(x, y) },
         css: {
           left: (x*100+5)+'px',
           top:  (y*100+5)+'px'
