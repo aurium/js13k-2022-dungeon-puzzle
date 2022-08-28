@@ -16,7 +16,8 @@ document.body.appendChild(scriptEl)
 
 let inc = .1
 function animate() {
-  window.requestAnimationFrame(animate)
+  //window.requestAnimationFrame(animate)
+  setTimeout(animate, 100)
   debugStats.begin() // DEBUG
   inc *= -1
 
