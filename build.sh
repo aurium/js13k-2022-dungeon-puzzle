@@ -1,12 +1,17 @@
 #!/bin/bash -e
 
-PATH="$PATH:$PWD/node_modules/.bin/"
-SRC_DIR=$PWD
+PROJ_DIR=$PWD
+SRC_DIR=$PROJ_DIR/game
+PATH="$PATH:$PROJ_DIR/node_modules/.bin/"
 
 NOW=$(date +%F_%T)
 
-test -z "$DEBUG" && DEBUG=false || DEBUG=true
-$DEBUG && echo '>> Allow debuging' || echo '>> Remove debuging'
+test "$DEBUG" = "true" && DEV_MODE=true
+test -n "$DEV" || DEV=false
+test -n "$DEV" -a -z "$DEV_MODE" && DEV_MODE=$DEV
+test "$DEV_MODE" = "on" && DEV_MODE=true
+test "$DEV_MODE" = "off" && DEV_MODE=false
+$DEV_MODE && echo '>> Allow debuging' || echo '>> Remove debuging'
 
 test -z "$DIST" && DIST=dist
 echo "Building into $DIST"
@@ -15,18 +20,21 @@ test -e "$DIST" && rm -r "$DIST"
 mkdir "$DIST"
 cd "$DIST"
 
-sed -r 's!(<link [^>]+>)!\n\1\n!g' ../*.html |
-grep 'rel="stylesheet"' ../*.html  |
-sed -r 's/.* href="([^"]+)".*/\1/' |
-xargs -I '{}' cat "../{}" > style.css
+SRC_HTMLS=$SRC_DIR/*.html
 
-sed -r 's!(<script [^>]+>)!\n\1\n!g' ../*.html |
+sed -r 's!(<link [^>]+>)!\n\1\n!g' $SRC_HTMLS |
+grep 'rel="stylesheet"' $SRC_HTMLS  |
+sed -r 's/.* href="([^"]+)".*/\1/'  |
+xargs -I '{}' cat "$SRC_DIR/{}" > style.css
+
+sed -r 's!(<script [^>]+>)!\n\1\n!g' $SRC_HTMLS |
 egrep '<script[^>]* src="'           |
 egrep -v '<script[^>]* src="https?:' |
-sed -r 's!.* src="([^"]+)".*!../\1!' |
+sed -r 's!.* src="([^"]+)".*!'"$SRC_DIR"'/\1!' |
 xargs concat-with-sourcemaps -v -o game.full.js
 
-for html in ../*.html; do
+for html in $SRC_HTMLS; do
+  echo ">> Writing \"$html\" to \"$DIST${html#$SRC_DIR}\"..."
   egrep -v 'rel="stylesheet"|<script [^d]' "$html" |
   tr -s '\n' ' ' |
   sed -r '
@@ -35,12 +43,12 @@ for html in ../*.html; do
     s!\s+! !g;
     s!> <!><!g;
     s/<!--[^>]*-->//
-  ' > "${html#.}"
+  ' > "${html#$SRC_DIR/}"
 done
 
 sed -ri "s/#BUILD#/$NOW/g" *
 
-if ! $DEBUG; then
+if ! $DEV_MODE; then
   # Accept some levels of nested parentheses inside `log()`.
   recursiveParentheses="([^()]*\([^()]*\)[^()]*)"
   recursiveParentheses="(\([^()]*$recursiveParentheses*[^()]*\))"
@@ -61,21 +69,24 @@ fi
 
 terser_args=(
   --compress
-  --source-map content=game.full.js.map,url=game.js.map
   --output game.js
 )
-if ! $DEBUG; then
+if $DEV_MODE; then
   terser_args=(
     "${terser_args[@]}"
-    --mangle 'toplevel,reserved=["initMap"]'
-    --mangle-props regex=/_$/
+    --source-map content=game.full.js.map,url=game.js.map
+  )
+else
+  terser_args=(
+  "${terser_args[@]}"
+  --mangle 'toplevel,reserved=["initMap"]'
+  --mangle-props regex=/_$/
   )
 fi
-echo "${terser_args[@]}" >&2
 
 # Minify JS
 (
-  $DEBUG               \
+  $DEV_MODE            \
   && cat game.full.js  \
   || sed -r 's/const/let/' game.full.js
 ) |
@@ -99,7 +110,7 @@ ls -lh
 if [ -z "$ZIP_PACK" ]; then
   test -n "$npm_package_name" \
   && ZIP_PACK="/tmp/${npm_package_name}_$(date +%F_%T).zip" \
-  || ZIP_PACK="/tmp/$(basename "$SRC_DIR")_$(date +%F_%T).zip"
+  || ZIP_PACK="/tmp/$(basename "$PROJ_DIR")_$(date +%F_%T).zip"
 fi
 ZIP_PACK="$(realpath "$ZIP_PACK")"
 
@@ -113,7 +124,7 @@ if $MKZIP; then
     zip_size=$(du -b "$ZIP_PACK" | sed 's/\t.*//')
   fi
 
-  ect_bin=../node_modules/ect-bin/vendor/linux/ect
+  ect_bin=$PROJ_DIR/node_modules/ect-bin/vendor/linux/ect
   if test -e $ect_bin; then
     test -e "$ZIP_PACK" && rm "$ZIP_PACK"
     chmod +x $ect_bin || true
@@ -140,7 +151,7 @@ if $MKZIP; then
     exit 0
   else
     echo -e "\e[31mThe game pakage over the limt. $ZIP_PACK $pct\e[0m"
-    $DEBUG && exit 0 || exit 1
+    $DEV_MODE && exit 0 || exit 1
   fi
 else
   echo -e "\e[30mBuilt without zip package. Enjoy dist.\e[0m"
