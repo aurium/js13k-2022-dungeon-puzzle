@@ -12,6 +12,8 @@ const avaliableBox = $('#avaliable')
 const tableEl = $('article')
 const puzzleLayerEl = $('article > div')
 const walkersLayerEl = $('article > ul')
+const boidTarget = placeEntity('x', 2, 2)
+boidTarget.onupdate()
 
 function onWinResize() {
   tableEl.classList.remove('hide')
@@ -51,6 +53,7 @@ function endDragAvaliablePiece(ev) {
   log('End drag piece', dragingPiece.className)
   if (canPiceFit(dragingPiece, ...lastTablePos)) {
     log(`Placing ${dragingPiece.className} at ${lastTablePos}`)
+    dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
     dragingPiece.placePiece(...lastTablePos)
   } else {
     dragingPiece.drag()

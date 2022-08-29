@@ -431,6 +431,34 @@ m i {
   box-shadow: 0 0 .3em #FE0, 0 0 .3em #FE0;
 }
 
+article x {
+  width: 24px;
+  height: 24px;
+  margin: -12px;
+  transform: translate(-.5em, -.5em) rotate(45deg);
+  z-index: -1;
+  opacity: .3;
+  transition: opacity 8s;
+}
+article x.show {
+  opacity: 1;
+  transition: 0s;
+}
+x::before {
+  background: #D00;
+  width: 4px;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+}
+x::after {
+  background: #D00;
+  height: 4px;
+  top: 10px;
+  left: 0;
+  right: 0;
+}
+
 grid {
   display: block;
   position: absolute;

@@ -47,15 +47,21 @@ function addGold(coins=0) {
   $('gold').innerHTML = `<b>🪙</b> ${gold} coins`
 }
 
+function getNeighbors(x, y) {
+  return {
+    N: (placedPieces[y-1]||[])[x],
+    S: (placedPieces[y+1]||[])[x],
+    E: placedPieces[y][x+1],
+    W: placedPieces[y][x-1]
+  }
+}
+
 /**
  * Can the player place the piece in this (x,y) table title?
  */
 function canPiceFit(piece, x, y) {
-  if (placedPieces[y][x]) return false
-  const pieceN = (placedPieces[y-1]||[])[x]
-  const pieceS = (placedPieces[y+1]||[])[x]
-  const pieceE = placedPieces[y][x+1]
-  const pieceW = placedPieces[y][x-1]
+  if ((placedPieces[y]||[])[x]) return false
+  const neighbors = getNeighbors(x, y)
 
   // Piece side must be flat to fit the puzle border
   if (x === 0 && piece.W !== '-') return false
@@ -69,10 +75,10 @@ function canPiceFit(piece, x, y) {
   if (y > 0 && piece.N === '-') return false
   if (y < puzzleHeight-1 && piece.S === '-') return false
 
-  if (!canPlugThatTwoPieces(piece, 'S', pieceS, 'N')) return false
-  if (!canPlugThatTwoPieces(piece, 'N', pieceN, 'S')) return false
-  if (!canPlugThatTwoPieces(piece, 'E', pieceE, 'W')) return false
-  if (!canPlugThatTwoPieces(piece, 'W', pieceW, 'E')) return false
+  if (!canPlugThatTwoPieces(piece, 'S', neighbors.S, 'N')) return false
+  if (!canPlugThatTwoPieces(piece, 'N', neighbors.N, 'S')) return false
+  if (!canPlugThatTwoPieces(piece, 'E', neighbors.E, 'W')) return false
+  if (!canPlugThatTwoPieces(piece, 'W', neighbors.W, 'E')) return false
 
   return true
 }

@@ -43,53 +43,53 @@ function initMap(level) {
   ).placePiece(0, 0)
 
   // kidnapped wizards
-  mkPiece('ff--', 'cavern disabled',
+  mkPiece('ff--', 'cavern',
     '#####'+
     '#####'+
     '#    '+
     '#m ##'+
     '#####'
-  ).placePiece(0, puzzleHeight-1)
-  mkPiece('--ff', 'cavern disabled',
+  ).placePiece(0, puzzleHeight-1, false)
+  mkPiece('--ff', 'cavern',
     '#####'+
     '## m#'+
     '    #'+
     '#####'+
     '#####'
-  ).placePiece(puzzleWidth-1, 0)
+  ).placePiece(puzzleWidth-1, 0, false)
 
   // Boss land
-  mkPiece('mmmm', 'cavern disabled',
+  mkPiece('mmmm', 'cavern',
     '## ##'+
     '##3# '+
     ' 3811'+
     '##111'+
     '# 111'
-  ).placePiece(puzzleWidth-3, puzzleHeight-3)
+  ).placePiece(puzzleWidth-3, puzzleHeight-3, false)
 
-  mkPiece('m-mm', 'cavern disabled',
+  mkPiece('m-mm', 'cavern',
     '#222#'+
     '##7 #'+
     '1## #'+
     '11###'+
     '111##'
-  ).placePiece(puzzleWidth-1, puzzleHeight-3)
+  ).placePiece(puzzleWidth-1, puzzleHeight-3, false)
 
-  mkPiece('mm-m', 'cavern disabled',
+  mkPiece('mm-m', 'cavern',
     '##111'+
     '2##11'+
     '27##1'+
     '2  ##'+
     '#####'
-  ).placePiece(puzzleWidth-3, puzzleHeight-1)
+  ).placePiece(puzzleWidth-3, puzzleHeight-1, false)
 
-  bossPiece = mkPiece('m--m', 'cavern disabled',
+  bossPiece = mkPiece('m--m', 'cavern',
     '    #'+
     ' 9#1#'+
     ' ##1#'+
     ' 111#'+
     '#####'
-  ).placePiece(puzzleWidth-1, puzzleHeight-1)
+  ).placePiece(puzzleWidth-1, puzzleHeight-1, false)
   bossPiece.mkChild('grid')
 
   for (let x=0; x<puzzleWidth; x++) for (let y=0; y<puzzleHeight; y++) {

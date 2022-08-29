@@ -101,18 +101,51 @@ function mkPiece(conn, terrain, map) {
   p.terrain = terrain
   p.map = parsedMap
   p.placePiece = placePiece
+  p.enablePiece = enablePiece
+  p.addEventListener('click', clickOnPlacedPiece)
   return p
 }
 
-function placePiece(px, py) {
+/**
+ * Capture piece click to define a target to hero boids to follow.
+ */
+function clickOnPlacedPiece(ev) {
+  boidTarget.x = ev.target.parentNode.x*5 + ev.layerX/20
+  boidTarget.y = ev.target.parentNode.y*5 + ev.layerY/20
+  boidTarget.onupdate()
+  boidTarget.className = 'show'
+  setTimeout(()=> boidTarget.className = '', 100)
+}
+
+/**
+ * Add place to the table.
+ * Some initial pieces can be setted as disabled. They will look blurry.
+ */
+function placePiece(px, py, enabled=true) {
   this.style.left = (px*100)+'px'
   this.style.top = (py*100)+'px'
   tableTop.appendChild(this)
+  this.x = px
+  this.y = py
   placedPieces[py][px] = this
+  if (enabled) {
+    this.enablePiece()
+    // Enable its disabled neighbors:
+    Object.values(getNeighbors(px, py)).filter(p => p).map(p =>
+      p.enablePiece()
+    )
+  } else { // this pece Disabled.
+    this.classList.add('disabled')
+  }
+  return this
+}
+
+function enablePiece() {
+  this.classList.remove('disabled')
   this.map.map((line, y)=>
     line.map((char, x)=> {
-      const elX = px*5 + x
-      const elY = py*5 + y
+      const elX = this.x*5 + x
+      const elY = this.y*5 + y
       let el = null
       if (char == '#') mapElements.push(el = placeWall(elX, elY))
       if (char == 'u') mapElements.push(el = placeWarrior(elX, elY))
@@ -124,7 +157,6 @@ function placePiece(px, py) {
   this.querySelectorAll('u,m,e').forEach(el =>
     el.replaceWith(mkEl('b'))
   )
-  return this
 }
 
 function placeWall(x, y) {
@@ -140,23 +172,21 @@ const walkerConf = {
   }
 }
 
-function placeWarrior(x, y) {
-  const el = mkEl('u', walkerConf)
+function placeEntity(tag, x, y, conf=walkerConf) {
+  const el = mkEl(tag, conf)
   el.x = x + .5
   el.y = y + .5
   return el
+}
+
+function placeWarrior(x, y) {
+  return placeEntity('u', x, y)
 }
 
 function placeWizard(x, y) {
-  const el = mkEl('m', walkerConf)
-  el.x = x + .5
-  el.y = y + .5
-  return el
+  return placeEntity('m', x, y)
 }
 
 function placeEnemy(x, y, size) {
-  const el = mkEl('e', { class: 'e'+size, ...walkerConf })
-  el.x = x + .5
-  el.y = y + .5
-  return el
+  return placeEntity('e', x, y, { class: 'e'+size, ...walkerConf })
 }
