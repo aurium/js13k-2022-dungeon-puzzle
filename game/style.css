@@ -205,11 +205,13 @@ p.disabled {
 
 #avaliable p {
   transform: rotate(9deg) scale(.666);
+  cursor: grab;
 }
 #avaliable p.dragging {
   transform: none;
   pointer-events: none;
   z-index: 10;
+  cursor: grabbing;
 }
 
 #avaliable button {

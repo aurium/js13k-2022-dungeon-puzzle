@@ -51,15 +51,16 @@ function getNeighbors(x, y) {
   return {
     N: (placedPieces[y-1]||[])[x],
     S: (placedPieces[y+1]||[])[x],
-    E: placedPieces[y][x+1],
-    W: placedPieces[y][x-1]
+    E: (placedPieces[y]||[])[x+1],
+    W: (placedPieces[y]||[])[x-1]
   }
 }
 
 /**
  * Can the player place the piece in this (x,y) table title?
  */
-function canPiceFit(piece, x, y) {
+function canPieceFit(piece, x, y) {
+  if (typeof(x)==='undefined' || typeof(y)==='undefined') return false
   if ((placedPieces[y]||[])[x]) return false
   const neighbors = getNeighbors(x, y)
 

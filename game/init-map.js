@@ -136,25 +136,29 @@ function initPieceOptions() {
       : '',
       terrain
     )
-    p.x = x
-    p.y = y
-    p.drag = (mouseX=0, mouseY=0)=> {
-      const srcBox = avaliableBox.getBoundingClientRect()
-      p.style.left = (mouseX ? mouseX-50-srcBox.x : 100*p.x) + 'px'
-      p.style.top  = (mouseY ? mouseY-50-srcBox.y : 90*p.y) + 'px'
-    }
-    p.drag()
-    p.addEventListener('mousedown', initDragAvaliablePiece)
-    avaliableBox.appendChild(p)
-    let btReplace = mkEl('button', {
-      text: '⭯',
-      parent: avaliableBox,
-      onclick() { replaceAvaliable(p, x, y) },
-      css: {
-        position: 'absolute',
-        left: (70 + 100*x) + 'px',
-        top:  (75 + 90*y) + 'px'
-      }
-    })
+    configPieceOption(p, x, y)
   }
+}
+
+function configPieceOption(p, x, y) {
+  p.x = x
+  p.y = y
+  p.drag = (mouseX=0, mouseY=0)=> {
+    const srcBox = avaliableBox.getBoundingClientRect()
+    p.style.left = (mouseX ? mouseX-50-srcBox.x : 100*p.x) + 'px'
+    p.style.top  = (mouseY ? mouseY-50-srcBox.y : 90*p.y) + 'px'
+  }
+  p.drag()
+  p.addEventListener('mousedown', initDragAvaliablePiece)
+  avaliableBox.appendChild(p)
+  let btReplace = mkEl('button', {
+    text: '⭯',
+    parent: avaliableBox,
+    onclick() { replaceAvaliable(p, x, y) },
+    css: {
+      position: 'absolute',
+      left: (70 + 100*x) + 'px',
+      top:  (75 + 90*y) + 'px'
+    }
+  })
 }

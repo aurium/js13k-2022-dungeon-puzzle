@@ -33,7 +33,16 @@ window.addEventListener('resize', onWinResize)
 window.addEventListener('load', onWinResize)
 
 function replaceAvaliable(piece, x, y) {
-  confirm('Repace '+piece.terrain+' piece ['+x+','+y+'] for 10 gold coins.')
+  if (gold < 5) {
+    return alert('You have not enought gold.')
+  }
+  if (confirm(
+    'Repace '+piece.terrain+' piece ['+x+','+y+'] for 10 gold coins.'
+  )) {
+    addGold(-5)
+    piece.remove()
+    configPieceOption(mkRndPiece(), x, y)
+  }
 }
 
 window.addEventListener('mouseup', endDragAvaliablePiece)
@@ -51,8 +60,9 @@ function initDragAvaliablePiece(ev) {
 function endDragAvaliablePiece(ev) {
   if (!dragingPiece) return 0
   log('End drag piece', dragingPiece.className)
-  if (canPiceFit(dragingPiece, ...lastTablePos)) {
+  if (canPieceFit(dragingPiece, ...lastTablePos)) {
     log(`Placing ${dragingPiece.className} at ${lastTablePos}`)
+    configPieceOption(mkRndPiece(), dragingPiece.x, dragingPiece.y)
     dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
     dragingPiece.placePiece(...lastTablePos)
   } else {
@@ -75,7 +85,7 @@ let lastTablePos = []
 function mouseoverTableTile(x, y) {
   if (dragingPiece) {
     lastTablePos = [x, y]
-    mapSpaces[y][x].className = canPiceFit(dragingPiece, x, y) ? 'valid' : 'invalid'
+    mapSpaces[y][x].className = canPieceFit(dragingPiece, x, y) ? 'valid' : 'invalid'
   } else {
     mapSpaces[y][x].className = ''
   }
