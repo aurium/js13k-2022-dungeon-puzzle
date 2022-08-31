@@ -110,8 +110,9 @@ function mkPiece(conn, terrain, map) {
  * Capture piece click to define a target to hero boids to follow.
  */
 function clickOnPlacedPiece(ev) {
-  boidTarget.x = ev.target.parentNode.x*5 + ev.layerX/20
-  boidTarget.y = ev.target.parentNode.y*5 + ev.layerY/20
+  boidTarget.x = ev.target.parentNode.x*5 + ev.layerX/20 -.5
+  boidTarget.y = ev.target.parentNode.y*5 + ev.layerY/20 -.5
+  log('Update target:', boidTarget.x, boidTarget.y)
   boidTarget.onupdate()
   boidTarget.className = 'show'
   setTimeout(()=> boidTarget.className = '', 100)
@@ -160,12 +161,13 @@ function enablePiece() {
 }
 
 function placeWall(x, y) {
-  return { x, y, x2:x+.2, y2:y+.2 }
+  return { x, y, x2:x+1, y2:y+1 }
 }
 
 const walkerConf = {
   child: ['i', ''],
   onupdate() {
+    //log('UPDATE', this.tagName, this.x, this.y)
     this.style.left = (this.x*20) + 'px'
     this.style.top  = (this.y*20) + 'px'
     $('article ul').appendChild(this)
@@ -174,6 +176,13 @@ const walkerConf = {
 
 function placeEntity(tag, x, y, conf=walkerConf) {
   const el = mkEl(tag, conf)
+  // el.style.filter = 'blur(.1em) grayscale(.9)'
+  // el.style.transition = '.15s linear, 2s filter linear'
+  el.setStyle({
+    filter: 'blur(.1em) grayscale(.9)',
+    transition: '.15s linear, 2s filter linear'
+  })
+  setTimeout(()=> el.style.filter = '', 100)
   el.x = x + .5
   el.y = y + .5
   return el

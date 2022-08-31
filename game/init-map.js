@@ -27,7 +27,7 @@ function initMap(level) {
     rndEnemyChance = parseInt($('#conf-enemy-chance').value)/100 || .1
   }
 
-  addGold(~~(200 * rndEnemyChance))
+  addGold(50)
   placedPieces = Array(puzzleHeight).fill(0).map(y => Array(puzzleWidth).fill(0))
 
   docRoot.style.setProperty('--pW', puzzleWidth)
@@ -97,8 +97,7 @@ function initMap(level) {
       if (!mapSpaces[y]) mapSpaces[y] = []
       mapSpaces[y][x] = mkEl('space', {
         parent: tableTop,
-        onmouseover() { mouseoverTableTile(x, y) },
-        onmouseout() { mouseoutTableTile(x, y) },
+        onmouseover(ev) { mouseoverTableTile(ev, x, y) },
         css: {
           left: (x*100+5)+'px',
           top:  (y*100+5)+'px'

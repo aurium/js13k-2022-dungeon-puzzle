@@ -12,7 +12,8 @@ const avaliableBox = $('#avaliable')
 const tableEl = $('article')
 const puzzleLayerEl = $('article > div')
 const walkersLayerEl = $('article > ul')
-const boidTarget = placeEntity('x', 2, 2)
+const boidTarget = placeEntity('x', 1.5, 1.5)
+boidTarget.style.transition = ''
 boidTarget.onupdate()
 
 function onWinResize() {
@@ -54,47 +55,47 @@ function initDragAvaliablePiece(ev) {
   log('Init drag piece', dragingPiece.className, dragingPiece.N)
   dragingPiece.style.transition = 'transform .6s'
   dragingPiece.classList.add('dragging')
+  body.classList.add('dragging')
   dragingPiece.drag(ev.pageX, ev.pageY)
 }
 
 function endDragAvaliablePiece(ev) {
   if (!dragingPiece) return 0
   log('End drag piece', dragingPiece.className)
-  if (canPieceFit(dragingPiece, ...lastTablePos)) {
-    log(`Placing ${dragingPiece.className} at ${lastTablePos}`)
+  if (canPieceFit(dragingPiece, ...overPlace)) {
+    log(`Placing ${dragingPiece.className} at ${overPlace}`)
     configPieceOption(mkRndPiece(), dragingPiece.x, dragingPiece.y)
     dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
-    dragingPiece.placePiece(...lastTablePos)
+    dragingPiece.placePiece(...overPlace)
   } else {
     dragingPiece.drag()
     dragingPiece.style.transition = '.6s'
   }
   dragingPiece.classList.remove('dragging')
+  body.classList.remove('dragging')
   dragingPiece = null
-  lastTablePos = []
+  overPlace = []
 }
 
 function dragAvaliablePiece(ev) {
   if (!dragingPiece) return 0
-  //log('Draging piece', ~~(ev.pageX/50)*50, ~~(ev.pageY/50)*50)
   dragingPiece.drag(ev.pageX, ev.pageY)
 }
 
-let overPlace = [0, 0]
-let lastTablePos = []
-function mouseoverTableTile(x, y) {
+let overPlace = []
+function mouseoverTableTile(ev, x, y) {
+  ev.stopPropagation()
   if (dragingPiece) {
-    lastTablePos = [x, y]
+    overPlace = [x, y]
     mapSpaces[y][x].className = canPieceFit(dragingPiece, x, y) ? 'valid' : 'invalid'
   } else {
     mapSpaces[y][x].className = ''
   }
-  overPlace = [x, y]
 }
 
-function mouseoutTableTile(x, y) {
-  overPlace = [0, 0]
-}
+window.addEventListener('mouseover', (ev)=> {
+  overPlace = []
+})
 
 $$('act button').map(btn =>
   btn.onclick = ()=> {
