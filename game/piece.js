@@ -132,7 +132,7 @@ function placePiece(px, py, enabled=true) {
   if (enabled) {
     this.enablePiece()
     // Enable its disabled neighbors:
-    Object.values(getNeighbors(px, py)).filter(p => p).map(p =>
+    trueishValues(getNeighbors(px, py)).map(p =>
       p.enablePiece()
     )
   } else { // this pece Disabled.

@@ -9,6 +9,8 @@ const $$ = (sel)=> [...document.querySelectorAll(sel)]
 const body = document.body
 const log = console.log // DEBUG
 
+const trueishValues = (obj)=> Object.values(obj).filter(val => val)
+
 let gold = 0
 let act = 'defensive'
 const tableTop = $('article div')

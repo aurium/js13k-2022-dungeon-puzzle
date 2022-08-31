@@ -35,15 +35,12 @@ window.addEventListener('load', onWinResize)
 
 function replaceAvaliable(piece, x, y) {
   if (gold < 5) {
-    return alert('You have not enought gold.')
+    return notify('You have not enought gold.')
   }
-  if (confirm(
-    'Repace '+piece.terrain+' piece ['+x+','+y+'] for 10 gold coins.'
-  )) {
-    addGold(-5)
-    piece.remove()
-    configPieceOption(mkRndPiece(), x, y)
-  }
+  notify('Repace '+piece.terrain+' piece for 5 gold coins.')
+  addGold(-5)
+  piece.remove()
+  configPieceOption(mkRndPiece(), x, y)
 }
 
 window.addEventListener('mouseup', endDragAvaliablePiece)
@@ -68,6 +65,7 @@ function endDragAvaliablePiece(ev) {
     dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
     dragingPiece.placePiece(...overPlace)
   } else {
+    if (canPieceFitError) notify(canPieceFitError)
     dragingPiece.drag()
     dragingPiece.style.transition = '.6s'
   }
@@ -105,3 +103,13 @@ $$('act button').map(btn =>
   }
 )
 $('act button:nth-child(2)').click()
+
+function notify(text) {
+  const notification = mkEl('news', { text, parent: body })
+  log('Notification:', text, notification)
+  setTimeout(()=> {
+    notification.setStyle({ opacity: 1, top: '45vh' })
+  }, 100)
+  setTimeout(()=> notification.style.opacity = 0, 4000)
+  setTimeout(()=> notification.remove(), 6000)
+}

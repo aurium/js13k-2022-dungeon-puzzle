@@ -59,28 +59,38 @@ function getNeighbors(x, y) {
 /**
  * Can the player place the piece in this (x,y) table title?
  */
+let canPieceFitError = ''
 function canPieceFit(piece, x, y) {
+  canPieceFitError = ''
   if (typeof(x)==='undefined' || typeof(y)==='undefined') return false
   if ((placedPieces[y]||[])[x]) return false
   const neighbors = getNeighbors(x, y)
 
-  // Piece side must be flat to fit the puzle border
+  canPieceFitError = 'Piece side must be flat to fit the puzle border.'
   if (x === 0 && piece.W !== '-') return false
   if (x === puzzleWidth-1 && piece.E !== '-') return false
   if (y === 0 && piece.N !== '-') return false
   if (y === puzzleHeight-1 && piece.S !== '-') return false
 
-  // A flat side must not be faced inside the puzzle
+  canPieceFitError = 'A flat side must not be faced inside the puzzle.'
   if (x > 0 && piece.W === '-') return false
   if (x < puzzleWidth-1 && piece.E === '-') return false
   if (y > 0 && piece.N === '-') return false
   if (y < puzzleHeight-1 && piece.S === '-') return false
 
+  canPieceFitError = 'This piece can NOT be connected here.'
   if (!canPlugThatTwoPieces(piece, 'S', neighbors.S, 'N')) return false
   if (!canPlugThatTwoPieces(piece, 'N', neighbors.N, 'S')) return false
   if (!canPlugThatTwoPieces(piece, 'E', neighbors.E, 'W')) return false
   if (!canPlugThatTwoPieces(piece, 'W', neighbors.W, 'E')) return false
 
+  const terrains = [piece, ...trueishValues(neighbors)].map(p => p.terrain)
+  if (terrains.includes(BUILDING) && terrains.includes(CAVERN)) {
+    canPieceFitError = 'You can NOT connect a building to a cavern.'
+    return false
+  }
+
+  canPieceFitError = ''
   return true
 }
 
