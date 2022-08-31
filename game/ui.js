@@ -115,3 +115,12 @@ function notify(text) {
   setTimeout(()=> notification.style.opacity = 0, 4000)
   setTimeout(()=> notification.remove(), 6000)
 }
+
+const clockPointer = mkEl('cp', { parent: $('clock') })
+const clockPointerShadow = mkEl('cp', { parent: $('clock') })
+let clockAngle = 0
+const startClock = ()=> setInterval(()=> {
+  clockPointer.style.transform =
+  clockPointerShadow.style.transform =
+  `rotate(${clockAngle+=5}deg)`
+}, 300)

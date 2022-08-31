@@ -120,6 +120,7 @@ function initMap(level) {
   //   }
   // }, 5e3)
 
+  startClock()
 }
 
 function initPieceOptions() {
