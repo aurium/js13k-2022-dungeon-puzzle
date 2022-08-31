@@ -8,10 +8,6 @@ mkEl('style', {
   text: `p.woods{background-image:${grass.join(',\n')}}`
 })
 
-const avaliableBox = $('#avaliable')
-const tableEl = $('article')
-const puzzleLayerEl = $('article > div')
-const walkersLayerEl = $('article > ul')
 const boidTarget = placeEntity('x', 1.5, 1.5)
 boidTarget.style.transition = ''
 boidTarget.onupdate()
@@ -104,11 +100,17 @@ $$('act button').map(btn =>
 )
 $('act button:nth-child(2)').click()
 
+let notifyY = 45 // Vary the notification position to prevent overlap.
+// step-by-step put the notifyY back to the original position while not used:
+setInterval(()=> notifyY = Math.min(notifyY+1, 45), 1500)
+// Show some notification to the user.
 function notify(text) {
   const notification = mkEl('news', { text, parent: body })
-  log('Notification:', text, notification)
+  log('Notification:', text)
+  notifyY -= 5
+  if (notifyY < 25) notifyY = 50
   setTimeout(()=> {
-    notification.setStyle({ opacity: 1, top: '45vh' })
+    notification.setStyle({ opacity: 1, top: notifyY+'vh' })
   }, 100)
   setTimeout(()=> notification.style.opacity = 0, 4000)
   setTimeout(()=> notification.remove(), 6000)

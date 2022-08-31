@@ -130,11 +130,27 @@ function placePiece(px, py, enabled=true) {
   this.y = py
   placedPieces[py][px] = this
   if (enabled) {
+    this.classList.add('disabled')
     this.enablePiece()
+    const neighbors = getNeighbors(px, py)
     // Enable its disabled neighbors:
-    trueishValues(getNeighbors(px, py)).map(p =>
-      p.enablePiece()
-    )
+    trueishValues(neighbors).map(p => p.enablePiece())
+    // Add warriors based on equal terrain neighbors:
+    const equalTerrains = trueishValues(neighbors)
+          .filter(p => p.terrain === this.terrain)
+    const count = equalTerrains.length
+    if (count) notify(count===1 ? `You get a new warrior.` : `You get ${count} new warriors.`)
+    equalTerrains.map(p => {
+      let x, y
+      while((p.map[y]||[])[x] !==  ' ') {
+        x = ~~rnd(5)
+        y = ~~rnd(5)
+      }
+      setTimeout(()=> {
+        log('Adding warrior at', p.x*5+x, p.y*5+y)
+        placeWarrior(p.x*5+x, p.y*5+y).style.filter = 'brightness(99) blur(.5em) opacity(0)'
+      }, 2000)
+    })
   } else { // this pece Disabled.
     this.classList.add('disabled')
   }
@@ -142,6 +158,7 @@ function placePiece(px, py, enabled=true) {
 }
 
 function enablePiece() {
+  if (!this.classList.contains('disabled')) return;
   this.classList.remove('disabled')
   this.map.map((line, y)=>
     line.map((char, x)=> {
@@ -166,6 +183,7 @@ function placeWall(x, y) {
 
 const walkerConf = {
   child: ['i', ''],
+  parent: walkersLayerEl,
   onupdate() {
     //log('UPDATE', this.tagName, this.x, this.y)
     this.style.left = (this.x*20) + 'px'
@@ -174,7 +192,7 @@ const walkerConf = {
   }
 }
 
-function placeEntity(tag, x, y, conf=walkerConf) {
+const placeEntity = (tag, x, y, conf=walkerConf)=> {
   const el = mkEl(tag, conf)
   // el.style.filter = 'blur(.1em) grayscale(.9)'
   // el.style.transition = '.15s linear, 2s filter linear'
@@ -185,6 +203,7 @@ function placeEntity(tag, x, y, conf=walkerConf) {
   setTimeout(()=> el.style.filter = '', 100)
   el.x = x + .5
   el.y = y + .5
+  el.onupdate()
   return el
 }
 
