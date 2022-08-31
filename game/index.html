@@ -4,12 +4,25 @@
   <title>JS13kGames - Dungeon Puzzle</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="game-select.css" />
+  <link rel="stylesheet" href="clock.css" />
 </head>
 <body id="game">
   <bg>
     <modal>
       <h1>Dungeon Puzzle</h1>
-      <p>Select the game dificult:</p>
+      <p>
+        You must to overcome the lord of death in the stone catacombs.
+        You does not know the path, you create the path as you walk it.
+        If your new step match the neighbor terrains,
+        each one will proffer you a new warrior.
+      </p>
+      <p>
+        You can point where your heroes should go, but you do not control they.
+      </p>
+      <p>
+        And remember: the lands of man can not touch the lands of death.
+      </p>
+      <p>Now, choose the task difficulty:</p>
       <lvl-opts>
         <button onclick="initMap('easy')">Easy</button>
         <button onclick="initMap('medium')">Medium</button>
@@ -42,6 +55,7 @@
     <div></div> <!-- Layer where pieces are placed -->
     <ul></ul> <!-- Layer where entities walk -->
   </article>
+  <clock><v></v><h></h></clock>
   <script src="constants.js"></script>
   <script src="mkel.js"></script>
   <script src="piece.js"></script>
