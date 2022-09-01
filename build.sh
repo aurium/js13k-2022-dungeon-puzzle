@@ -102,6 +102,7 @@ echo "$CSS" | sed -r '
   s! *([;,{}]) *!\1!g;
   s!\( *!(!g;
   s! *\)!)!g;
+  s!: *!:!g;
 ' > style.css
 
 echo -e "\n>> Built files:"
