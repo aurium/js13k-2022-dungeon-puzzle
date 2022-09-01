@@ -116,11 +116,31 @@ function notify(text) {
   setTimeout(()=> notification.remove(), 6000)
 }
 
+/* * * Clock * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 const clockPointer = mkEl('cp', { parent: $('clock') })
-const clockPointerShadow = mkEl('cp', { parent: $('clock') })
-let clockAngle = 0
-const startClock = ()=> setInterval(()=> {
+const clockPointerShadow = mkEl('cp', { parent: $('clock'), class: 'shadow' })
+const turnsCounter = mkEl('b', { parent: $('clock') })
+
+function startClock() {
+  startTime = Date.now()
+  updateClock()
+  playTicTac()
+}
+
+function updateClock() {
+  const elapsedTime = Date.now() - startTime
+  let clockTurn = elapsedTime / 60_000
+  turnsCounter.innerText = 'Turn ' + ~~(clockTurn+1)
+  if (clockTurn < 13) {
+    if (gameIsOn) setTimeout(updateClock, 500)
+  } else {
+    clockTurn = 13
+    turnsCounter.innerText = 'Timeout'
+    gameTimeout()
+  }
+  if (~~clockTurn === 12) turnsCounter.style.color = '#A55'
   clockPointer.style.transform =
   clockPointerShadow.style.transform =
-  `rotate(${clockAngle+=5}deg)`
-}, 300)
+  `rotate(${clockTurn}turn)`
+}

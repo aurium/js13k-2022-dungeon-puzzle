@@ -16,8 +16,7 @@ document.body.appendChild(scriptEl)
 
 let inc = .1
 function animate() {
-  //window.requestAnimationFrame(animate)
-  setTimeout(animate, 100)
+  if (gameIsOn) setTimeout(animate, 100)
   debugStats.begin() // DEBUG
   inc *= -1
 
@@ -32,10 +31,15 @@ function animate() {
   debugStats.end() // DEBUG
 }
 
-log('Game ON!')
-animate()
+// Will be called by the clock after 13 munutes.
+function gameTimeout() {
+  gameOver('Your time is over.')
+  playAlarm()
+}
 
-window.gameOver = function() {
+window.gameOver = function(message) {
+  gameIsOn = false
+  notify(message)
   $$('article p').map(piece => {
     piece.style.transition = (1+rnd())+'s'
     piece.style.transform = `translate(${rnd(.4)-.2}em,${rnd(.4)-.2}em) rotate(${rnd(.4)-.2}turn)`

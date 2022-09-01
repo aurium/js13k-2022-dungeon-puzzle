@@ -7,7 +7,8 @@ let placedPieces
 
 function initMap(level) {
 
-  $('bg').style.display = 'none'
+  $('bg').className = 'hide'
+  setTimeout(()=> $('bg').style.display = 'none', 4000)
 
   if (level == 'easy') {
     puzzleWidth = 5
@@ -27,7 +28,6 @@ function initMap(level) {
     rndEnemyChance = parseInt($('#conf-enemy-chance').value)/100 || .1
   }
 
-  addGold(50)
   placedPieces = Array(puzzleHeight).fill(0).map(y => Array(puzzleWidth).fill(0))
 
   docRoot.style.setProperty('--pW', puzzleWidth)
@@ -120,7 +120,11 @@ function initMap(level) {
   //   }
   // }, 5e3)
 
+  gameIsOn = true
+  addGold(50)
+  initAudio()
   startClock()
+  animate()
 }
 
 function initPieceOptions() {

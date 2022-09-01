@@ -7,6 +7,9 @@ const arrRnd = (arr)=> arr[floor(rnd(arr.length))]
 const $ = (sel)=> document.querySelector(sel)
 const $$ = (sel)=> [...document.querySelectorAll(sel)]
 
+let gameIsOn = false
+let startTime
+
 const body = document.body
 const avaliableBox = $('#avaliable')
 const tableEl = $('article')
