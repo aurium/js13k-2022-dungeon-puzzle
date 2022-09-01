@@ -147,6 +147,7 @@ function placePiece(px, py, enabled=true) {
   this.y = py
   placedPieces[py][px] = this
   if (enabled) {
+    addGold(1)
     this.classList.add('disabled')
     this.enablePiece()
     const neighbors = getNeighbors(px, py)

@@ -121,7 +121,7 @@ function initMap(level) {
   // }, 5e3)
 
   gameIsOn = true
-  addGold(puzzleWidth*puzzleHeight*10)
+  addGold(199 + ~~(puzzleWidth*puzzleHeight/20)*50)
   initAudio()
   startClock()
   animate()
