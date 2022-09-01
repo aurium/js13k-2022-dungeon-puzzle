@@ -37,7 +37,7 @@ function gameTimeout() {
   playAlarm()
 }
 
-window.gameOver = function(message) {
+function gameOver(message) {
   gameIsOn = false
   notify(message)
   $$('article p').map(piece => {
@@ -45,6 +45,7 @@ window.gameOver = function(message) {
     piece.style.transform = `translate(${rnd(.4)-.2}em,${rnd(.4)-.2}em) rotate(${rnd(.4)-.2}turn)`
   })
 }
+window.gameOver = gameOver //DEBUG
 
 function addGold(coins=0) {
   gold += coins

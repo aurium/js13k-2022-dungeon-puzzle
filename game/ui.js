@@ -55,7 +55,7 @@ function initDragAvaliablePiece(ev) {
 function endDragAvaliablePiece(ev) {
   if (!dragingPiece) return 0
   log('End drag piece', dragingPiece.className)
-  if (canPieceFit(dragingPiece, ...overPlace)) {
+  if (gameIsOn && canPieceFit(dragingPiece, ...overPlace)) {
     log(`Placing ${dragingPiece.className} at ${overPlace}`)
     configPieceOption(mkRndPiece(), dragingPiece.x, dragingPiece.y)
     dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
