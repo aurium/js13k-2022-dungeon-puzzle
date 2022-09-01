@@ -1,0 +1,12 @@
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - mv game public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
