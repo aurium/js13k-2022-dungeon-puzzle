@@ -36,6 +36,7 @@ function replaceAvaliable(piece, x, y) {
   notify('Repace '+piece.terrain+' piece for 5 gold coins.')
   addGold(-5)
   piece.remove()
+  piece.btReplace.remove()
   configPieceOption(mkRndPiece(), x, y)
 }
 
@@ -57,7 +58,9 @@ function endDragAvaliablePiece(ev) {
   log('End drag piece', dragingPiece.className)
   if (gameIsOn && canPieceFit(dragingPiece, ...overPlace)) {
     log(`Placing ${dragingPiece.className} at ${overPlace}`)
-    configPieceOption(mkRndPiece(), dragingPiece.x, dragingPiece.y)
+    const {x, y} = dragingPiece
+    dragingPiece.btReplace.remove()
+    setTimeout(()=> configPieceOption(mkRndPiece(), x, y), 500)
     dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
     dragingPiece.placePiece(...overPlace)
   } else {

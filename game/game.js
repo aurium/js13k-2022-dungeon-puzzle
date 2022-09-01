@@ -47,7 +47,8 @@ function gameOver(message) {
 }
 window.gameOver = gameOver //DEBUG
 
-function addGold(coins=0) {
+// Let the player to sheet
+window.addGold = function addGold(coins=0) {
   gold += coins
   $('gold').innerHTML = `<b>🪙</b> ${gold} coins`
 }
@@ -89,8 +90,11 @@ function canPieceFit(piece, x, y) {
   if (!canPlugThatTwoPieces(piece, 'E', neighbors.E, 'W')) return false
   if (!canPlugThatTwoPieces(piece, 'W', neighbors.W, 'E')) return false
 
-  const terrains = [piece, ...trueishValues(neighbors)].map(p => p.terrain)
-  if (terrains.includes(BUILDING) && terrains.includes(CAVERN)) {
+  const neighborTerrains = trueishValues(neighbors).map(p => p.terrain)
+  if (
+    (piece.terrain === BUILDING && neighborTerrains.includes(CAVERN)) ||
+    (piece.terrain === CAVERN && neighborTerrains.includes(BUILDING))
+  ) {
     canPieceFitError = 'You can NOT connect a building to a cavern.'
     return false
   }

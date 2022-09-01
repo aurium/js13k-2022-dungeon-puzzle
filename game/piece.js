@@ -1,8 +1,24 @@
 const rndPlug = ()=> rnd() < .5 ? 'm' : 'f'
 
 function mkRndPiece(border = -1, conns, terrain) {
-  if (border == -1) border = floor(rnd(10)) // 0-3 border piece, 4-... inner piece
   let [N, E, S, W] = (conns||'').split('')
+
+  // If no flat border was defined,
+  // give it a good chance to make a border piece,
+  // but only if there is a missed border:
+  if (border === -1 && rnd()<.666) {
+    const borderNeeded = []
+    if (placedPieces[0].filter(p => !p).length)
+        borderNeeded.push(0) // N
+    if (placedPieces.map(l=>l[puzzleWidth-1]).filter(p => !p).length)
+        borderNeeded.push(1) // E
+    if (placedPieces[puzzleHeight-1].filter(p => !p).length)
+        borderNeeded.push(2) // S
+    if (placedPieces.map(l=>l[0]).filter(p => !p).length)
+        borderNeeded.push(3) // W
+    border = arrRnd(borderNeeded)
+  }
+
   if (!conns) {
     const conn = (pos)=> border==pos ? '-' : rndPlug()
     N = conn(0)
@@ -10,7 +26,8 @@ function mkRndPiece(border = -1, conns, terrain) {
     S = conn(2)
     W = conn(3)
   }
-  if (!terrain) terrain = [BUILDING, WOODS, CAVERN][floor(rnd(3))]
+
+  if (!terrain) terrain = [BUILDING, WOODS, WOODS, CAVERN][floor(rnd(4))]
   const map = mkRndMap(N,E,S,W, terrain==WOODS ? .8 : terrain==CAVERN ? .9 : 1 )
   return mkPiece(N+E+S+W, terrain, map)
 }

@@ -121,7 +121,7 @@ function initMap(level) {
   // }, 5e3)
 
   gameIsOn = true
-  addGold(50)
+  addGold(puzzleWidth*puzzleHeight*10)
   initAudio()
   startClock()
   animate()
@@ -155,7 +155,7 @@ function configPieceOption(p, x, y) {
   p.drag()
   p.addEventListener('mousedown', initDragAvaliablePiece)
   avaliableBox.appendChild(p)
-  let btReplace = mkEl('button', {
+  p.btReplace = mkEl('button', {
     text: '⭯',
     parent: avaliableBox,
     onclick() { replaceAvaliable(p, x, y) },
