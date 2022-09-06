@@ -14,21 +14,111 @@ scriptEl.src = 'https://cdn.jsdelivr.net/gh/mrdoob/stats.js@master/build/stats.j
 document.body.appendChild(scriptEl)
 /* END DEBUG */
 
-let inc = .1
-function animate() {
+const vecTo = (p1, p2)=> ({
+  x: p2.x - p1.x,
+  y: p2.y - p1.y
+})
+
+const vecSize = (vec)=> Math.sqrt(vec.x**2 + vec.y**2)
+
+const vecOne = (vec, multplier=1)=> {
+  const d = vecSize(vec)
+  return {
+    x: multplier * vec.x/d,
+    y: multplier * vec.y/d
+  }
+}
+
+const animate = ()=> {
   if (gameIsOn) setTimeout(animate, 100)
   debugStats.begin() // DEBUG
-  inc *= -1
 
-  const warriors = $$(':not(.disabled)>map u')
-  const wizards  = $$(':not(.disabled)>map m')
-  const enemies  = $$(':not(.disabled)>map e')
-  const all = [ ...warriors, ...wizards, ...enemies ]
-  for (let i=0,el; el=all[i]; i++) {
-    //el.style.left = (parseFloat(el.style.left||'0') + inc) + 'px'
+  for (let el,i=0; el=mapEntities[i]; i++) {
+    let vec2Target = vecTo(el, boidTarget)
+    let velocity2Target = vecOne(vec2Target, .1)
+    if (vecSize(vec2Target) > 2) {
+      el.v.x += velocity2Target.x
+      el.v.y += velocity2Target.y
+    } else {
+      el.v.x += velocity2Target.x/5
+      el.v.y += velocity2Target.y/5
+    }
+    el.v.x += rnd(.1)-.05
+    el.v.y += rnd(.1)-.05
+    let vel = vecSize(el.v)
+    if (vel > .2) el.v = vecOne(el.v, .2)
+    testColision(el)
   }
+  for (let el,i=0; el=mapEntities[i]; i++) {
+    testColisionWall(el)
+    if (el.life > 0) {
+      el.x += el.v.x
+      el.y += el.v.y
+      el.onupdate()
+    }
+  }
+  queueMicrotask(()=>log('=====================================================')) // DEBUG
 
   debugStats.end() // DEBUG
+}
+
+const testColision = (el1)=> {
+  for (let el2,i=0; el2=mapEntities[i]; i++) if (el1 !== el2) {
+    let vec = vecTo(el1, el2)
+    let dist = vecSize(vec)
+    let minDist = el1.r + el2.r
+    if (areEnemies(el1, el2)) {
+      if (dist < minDist) {
+        log(el1.id,'hit',el2.id)
+        hitEntity(el2)
+      }
+    } else { // Friends
+      if (dist < minDist*1.5) {
+        vec = vecOne(vec, .05)
+        el1.v.x -= vec.x
+        el1.v.y -= vec.y
+      }
+    }
+    if (dist < minDist) {
+      vec = vecOne(vec, .1)
+      el1.v.x = -vec.x
+      el1.v.y = -vec.y
+    }
+  }
+}
+
+const testColisionWall = (el)=> {
+  for (let wall,i=0; wall=mapWalls[i]; i++) {
+    let vec = vecTo(el, wall)
+    let dist = vecSize(vec)
+    let minDist = el.r + wall.r
+    if (dist < minDist*1.4) {
+      vec = vecOne(vec, .1)
+      let dx = abs(el.x - wall.x)
+      let dy = abs(el.y - wall.y)
+      if (dx > dy && dx < minDist) el.v.x = -vec.x
+      if (dy > dx && dy < minDist) el.v.y = -vec.y
+    }
+  }
+}
+
+const areEnemies = (el1, el2)=> {
+  const els = [el1.tagName, el2.tagName].sort().join('')
+  return els === 'EU' || els === 'EM'
+}
+
+const hitEntity = (el)=> {
+  el.life--
+  el.className = el.className.replace(
+    /life./,
+    `life${(el.life <= 0) ? 0 : ~~(el.life*5/el.lifeOrig)+1}`
+  )
+  log(el.id,'lost',el.className, el.x.toFixed(2), el.y.toFixed(2), el.parentNode)
+  if (el.life <= 0) {
+    queueMicrotask(()=> log('DEAD:', el.id, el.x.toFixed(2), el.y.toFixed(2))) // DEBUG
+    queueMicrotask(()=> mapEntities = mapEntities.filter(el2 => el2 !== el))
+    setTimeout(()=> el.parentNode && el.remove(), 40_000)
+  }
 }
 
 // Will be called by the clock after 13 munutes.

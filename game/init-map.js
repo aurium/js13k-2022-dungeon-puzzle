@@ -1,10 +1,3 @@
-const mapSpaces = []
-const mapElements = []
-const docRoot = $(':root')
-let bossPiece = null
-let puzzleWidth, puzzleHeight, rndEnemyChance, bigEnemyProp = .2
-let placedPieces
-
 function initMap(level) {
 
   $('bg').className = 'hide'

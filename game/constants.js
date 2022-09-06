@@ -1,11 +1,19 @@
 const BUILDING = 'building'
 const WOODS = 'woods'
 const CAVERN = 'cavern'
-const {floor, ceil, max} = Math
+const {floor, ceil, max, abs} = Math
 const rnd = (mult=1)=> Math.random()*mult
 const arrRnd = (arr)=> arr[floor(rnd(arr.length))]
 const $ = (sel)=> document.querySelector(sel)
 const $$ = (sel)=> [...document.querySelectorAll(sel)]
+
+const mapSpaces = []
+const mapWalls = []
+let mapEntities = []
+const docRoot = $(':root')
+let bossPiece = null
+let puzzleWidth, puzzleHeight, rndEnemyChance, bigEnemyProp = .2
+let placedPieces
 
 let gameIsOn = false
 let startTime

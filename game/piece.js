@@ -183,34 +183,39 @@ function enablePiece() {
       const elX = this.x*5 + x
       const elY = this.y*5 + y
       let el = null
-      if (char == '#') mapElements.push(el = placeWall(elX, elY))
-      if (char == 'u') mapElements.push(el = placeWarrior(elX, elY))
-      if (char == 'm') mapElements.push(el = placeWizard(elX, elY))
-      if (char  >  0 ) mapElements.push(el = placeEnemy(elX, elY, char))
+      if (char == '#') mapWalls.push(placeWall(elX, elY))
+      if (char == 'u') el = placeWarrior(elX, elY)
+      if (char == 'm') el = placeWizard(elX, elY)
+      if (char  >  0 ) el = placeEnemy(elX, elY, char)
       if (el && el.onupdate) el.onupdate()
+      if (el) el.id = char+'-'+rnd().toString(36).substr(2,3) // DEBUG
     })
   )
   this.querySelectorAll('u,m,e').forEach(el =>
     el.replaceWith(mkEl('b'))
   )
+  log(mapEntities)
+  log(mapWalls)
 }
 
 function placeWall(x, y) {
-  return { x, y, x2:x+1, y2:y+1 }
+  return {
+    x: x+.5,
+    y: y+.5,
+    r: .5
+  }
 }
 
 const walkerConf = {
   child: ['i', ''],
   parent: walkersLayerEl,
   onupdate() {
-    //log('UPDATE', this.tagName, this.x, this.y)
     this.style.left = (this.x*20) + 'px'
     this.style.top  = (this.y*20) + 'px'
-    $('article ul').appendChild(this)
   }
 }
 
-const placeEntity = (tag, x, y, conf=walkerConf)=> {
+const placeEntity = (tag, x, y, conf=walkerConf, size=2)=> {
   const el = mkEl(tag, conf)
   // el.style.filter = 'blur(.1em) grayscale(.9)'
   // el.style.transition = '.15s linear, 2s filter linear'
@@ -219,9 +224,18 @@ const placeEntity = (tag, x, y, conf=walkerConf)=> {
     transition: '.15s linear, 2s filter linear'
   })
   setTimeout(()=> el.style.filter = '', 100)
+  el.v = { x:0, y:0 }
   el.x = x + .5
   el.y = y + .5
+  el.r = ((5+size)/14)/2
+  el.lifeOrig = el.life = tag==='u'
+                        ? 9
+                        : tag==='m'
+                        ? 3
+                        : size
+  el.classList.add('life6')
   el.onupdate()
+  tag !== 'x' && mapEntities.push(el)
   return el
 }
 
@@ -234,5 +248,5 @@ function placeWizard(x, y) {
 }
 
 function placeEnemy(x, y, size) {
-  return placeEntity('e', x, y, { class: 'e'+size, ...walkerConf })
+  return placeEntity('e', x, y, { class: 'e'+size, ...walkerConf }, size)
 }

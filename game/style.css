@@ -365,13 +365,19 @@ map w {
   filter: blur(.1em) grayscale(.8);
 }
 
-e i {
+:is(u,m,e) i {
   position: absolute;
   border-radius: 1em;
+}
+:is(u,m,e) i::before {
+  border-radius: 1em;
+}
+
+e i {
   width: var(--size);
   height: var(--size);
   transform: translate(calc( (1em - var(--size)) / 2 ), calc( (1em - var(--size)) / 2 ));
-  background: radial-gradient(at 30% 30%, #F20, #100);
+  background: radial-gradient(at 30% 30%, #674, #010);
 }
 
 .e1 { --size: 0.40em }
@@ -393,45 +399,26 @@ e i {
   border: 1.5px dotted rgba(0,0,0,.7);
 }
 
-.e8 i::before {
-  top: .225em;
-  left: .225em;
-  width: .4em;
-  height: .4em;
-  border-radius: 1em;
-  border: 1.5px solid #EEE;
-  filter: blur(1px);
-}
 .e8 i::after {
   top: .225em;
   left: .225em;
   width: .4em;
   height: .4em;
   border-radius: 1em;
-  border: 1.5px dotted #555;
+  border: 1.5px dotted rgba(255,255,255,.5);
 }
 
-.e9 i::before {
-  top: .25em;
-  left: .25em;
-  width: .5em;
-  height: .5em;
-  border-radius: 1em;
-  border: 1.5px solid #FF0;
-  filter: blur(1px);
-}
 .e9 i::after {
   top: .3em;
   left: .3em;
   width: .4em;
   height: .4em;
   border-radius: 1em;
-  border: 1.5px dotted #600;
+  border: 1.5px dotted #6C0;
+  filter: drop-shadow(0 0 1px #0C0) drop-shadow(0 0 1px #0C0);
 }
 
 u i, m i {
-  position: absolute;
-  border-radius: 1em;
   width: .55em;
   height: .55em;
   transform: translate(.225em, .225em);
@@ -441,6 +428,51 @@ u i, m i {
 m i {
   background: radial-gradient(at 30% 30%, #CCC, #000);
   box-shadow: 0 0 .3em #FE0, 0 0 .3em #FE0;
+}
+
+:is(u,m,e) i::before {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #E00;
+  opacity: .8;
+  filter: blur(2px);
+  transition: .5s;
+}
+:is(u,m,e).life5 i::before {
+  width: 10%;
+  height: 10%;
+}
+:is(u,m,e).life4 i::before {
+  width: 25%;
+  height: 25%;
+}
+:is(u,m,e).life3 i::before {
+  width: 45%;
+  height: 45%;
+}
+:is(u,m,e).life2 i::before {
+  width: 65%;
+  height: 65%;
+}
+:is(u,m,e).life1 i::before {
+  width: 85%;
+  height: 85%;
+}
+:is(u,m,e).life0 i::before {
+  width: 110%;
+  height: 110%;
+}
+
+:is(u,m,e) {
+  filter: blur(0);
+  z-index: 2;
+}
+:is(u,m,e).life0 {
+  filter: blur(3px);
+  opacity: 0;
+  z-index: 1;
+  transition: .2s, opacity 20s 20s, filter 10s, z-index 1s !important;
 }
 
 article x {
