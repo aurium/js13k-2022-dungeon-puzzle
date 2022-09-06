@@ -29,6 +29,7 @@ const vecOne = (vec, multplier=1)=> {
   }
 }
 
+let hadAHitThisTurn = false
 const animate = ()=> {
   if (gameIsOn) setTimeout(animate, 100)
   debugStats.begin() // DEBUG
@@ -57,8 +58,9 @@ const animate = ()=> {
       el.onupdate()
     }
   }
-  queueMicrotask(()=>log('=====================================================')) // DEBUG
-
+  if (hadAHitThisTurn) playTone(600, 0, 1, .5, 200)
+  hadAHitThisTurn = false
+  //queueMicrotask(()=>log('=====================================================')) // DEBUG
   debugStats.end() // DEBUG
 }
 
@@ -69,7 +71,7 @@ const testColision = (el1)=> {
     let minDist = el1.r + el2.r
     if (areEnemies(el1, el2)) {
       if (dist < minDist) {
-        log(el1.id,'hit',el2.id)
+        //log(el1.id,'hit',el2.id)
         hitEntity(el2)
       }
     } else { // Friends
@@ -108,16 +110,18 @@ const areEnemies = (el1, el2)=> {
 }
 
 const hitEntity = (el)=> {
+  hadAHitThisTurn = true
   el.life--
   el.className = el.className.replace(
     /life./,
     `life${(el.life <= 0) ? 0 : ~~(el.life*5/el.lifeOrig)+1}`
   )
-  log(el.id,'lost',el.className, el.x.toFixed(2), el.y.toFixed(2), el.parentNode)
+  //log(el.id,'lost',el.className, el.x.toFixed(2), el.y.toFixed(2), el.parentNode)
   if (el.life <= 0) {
-    queueMicrotask(()=> log('DEAD:', el.id, el.x.toFixed(2), el.y.toFixed(2))) // DEBUG
+    //queueMicrotask(()=> log('DEAD:', el.id, el.x.toFixed(2), el.y.toFixed(2))) // DEBUG
     queueMicrotask(()=> mapEntities = mapEntities.filter(el2 => el2 !== el))
     setTimeout(()=> el.parentNode && el.remove(), 40_000)
+    if (el.tagName === 'E') addGold(el.lifeOrig, true)
   }
 }
 
@@ -130,6 +134,10 @@ function gameTimeout() {
 function gameOver(message) {
   gameIsOn = false
   notify(message)
+  mapEntities.map(el => {
+    el.style.transition = (1+rnd())+'s'
+    el.style.transform = `translate(${rnd(4)-2}em,${rnd(4)-2}em)`
+  })
   $$('article p').map(piece => {
     piece.style.transition = (1+rnd())+'s'
     piece.style.transform = `translate(${rnd(.4)-.2}em,${rnd(.4)-.2}em) rotate(${rnd(.4)-.2}turn)`
@@ -138,7 +146,11 @@ function gameOver(message) {
 window.gameOver = gameOver //DEBUG
 
 // Let the player to sheet
-window.addGold = function addGold(coins=0) {
+window.addGold = function addGold(coins=0, playSound) {
+  if (playSound) for (let i=0; i<6; i++) {
+    playTone(2000, .5 + i/20, .6, .5)
+    playTone(8000, .5 + i/20, .1, .5)
+  }
   gold += coins
   $('gold').innerHTML = `<b>🪙</b> ${gold} coins`
 }

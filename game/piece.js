@@ -167,8 +167,9 @@ function placePiece(px, py, enabled=true) {
       setTimeout(()=> {
         log('Adding warrior at', p.x*5+x, p.y*5+y)
         placeWarrior(p.x*5+x, p.y*5+y).style.filter = 'brightness(99) blur(.5em) opacity(0)'
-      }, 2000)
+      }, 1000)
     })
+    for (let i=4; i<12; i++) playTone(i*10, 0, 1, .3)
   } else { // this pece Disabled.
     this.classList.add('disabled')
   }
@@ -194,8 +195,6 @@ function enablePiece() {
   this.querySelectorAll('u,m,e').forEach(el =>
     el.replaceWith(mkEl('b'))
   )
-  log(mapEntities)
-  log(mapWalls)
 }
 
 function placeWall(x, y) {
@@ -217,13 +216,12 @@ const walkerConf = {
 
 const placeEntity = (tag, x, y, conf=walkerConf, size=2)=> {
   const el = mkEl(tag, conf)
-  // el.style.filter = 'blur(.1em) grayscale(.9)'
-  // el.style.transition = '.15s linear, 2s filter linear'
   el.setStyle({
     filter: 'blur(.1em) grayscale(.9)',
-    transition: '.15s linear, 2s filter linear'
+    transition: '2s filter linear'
+    //transition: '.15s linear, 2s filter linear'
   })
-  setTimeout(()=> el.style.filter = '', 100)
+  setTimeout(()=> el.style.filter = 'none', 100)
   el.v = { x:0, y:0 }
   el.x = x + .5
   el.y = y + .5
