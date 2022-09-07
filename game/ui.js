@@ -21,10 +21,10 @@ function onWinResize() {
   const em = layerW / 13
   const marginX = max(.2*em, (tableW - layerW) / 2)
   const marginY = max(.2*em, (tableH - layerH) / 2)
-  puzzleLayerEl.style.left = marginX
-  puzzleLayerEl.style.top = marginY
-  walkersLayerEl.style.left = marginX
-  walkersLayerEl.style.top = marginY
+  puzzleLayerEl.style.left = marginX + 'px'
+  puzzleLayerEl.style.top = marginY + 'px'
+  walkersLayerEl.style.left = marginX + 'px'
+  walkersLayerEl.style.top = marginY + 'px'
 }
 window.addEventListener('resize', onWinResize)
 window.addEventListener('load', onWinResize)

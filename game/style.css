@@ -127,14 +127,21 @@ article {
 article div, #avaliable {
   filter: drop-shadow(.01em .01em .02em rgba(0,0,0,.9));
 }
-article div, article ul {
+article :is(div, ul) {
   position: absolute;
   width: calc(var(--pW)*100px);
   height: calc(var(--pH)*100px);
   transition: opacity 1s;
+  overflow: hidden;
 }
-article.hide div, article.hide ul {
+article.hide :is(div, ul) {
   opacity: 0;
+}
+.gameover article :is(div, ul) {
+  overflow: visible;
+}
+.gameover article wall {
+  display: none;
 }
 
 space {

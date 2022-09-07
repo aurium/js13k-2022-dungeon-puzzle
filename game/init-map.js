@@ -89,9 +89,9 @@ function initMap(level) {
   const bossOffsetX = (puzzleWidth-1)*5
   const bossOffsetY = (puzzleHeight-1)*5
   for (let x=3.4; x>0; x-=.4)
-    gridWall.push(placeWall(bossOffsetX+x, bossOffsetY+.2, .2))
+    gridWall.push(placeWall(bossOffsetX+x, bossOffsetY+.2, .3))
   for (let y=.6; y<3.6; y+=.4)
-    gridWall.push(placeWall(bossOffsetX+.2, bossOffsetY+y, .2))
+    gridWall.push(placeWall(bossOffsetX+.2, bossOffsetY+y, .3))
   bossPiece.openGrid = ()=> {
     bossGrid.setStyle({ width: '0em', top: '1em' })
     gridWall.map((wall, i)=> setTimeout(()=> {
@@ -105,7 +105,26 @@ function initMap(level) {
       if (wall.el) wall.el.remove() // DEBUG
     }, (i+2)*170))
   }
+  bossPiece.origEnablePiece = bossPiece.enablePiece
+  bossPiece.enablePiece = ()=> {
+    bossPiece.origEnablePiece()
+    bossEl = walkersLayerEl.querySelector('.e9')
+    queueMicrotask(()=> {
+      for (let i=0; i<9; i++) {
+        let x = (i+1)/100 // Add a small move to prevent zero distance colision
+        placeEnemy(bossOffsetX+i%3+1, bossOffsetY+3+x, 1)
+        placeEnemy(bossOffsetX+3+x, bossOffsetY+i%3+1, 1)
+      }
+    })
+  }
 
+  // Place protection walls. So entities can't escape:
+  const halfWidth = puzzleWidth*5/2
+  const halfHeight = puzzleHeight*5/2
+  /* NORT  */ placeWall(halfWidth-.5, -halfWidth-.5, halfWidth)
+  /* SOUTH */ placeWall(halfWidth-.5, halfHeight*2+halfWidth-.5, halfWidth)
+  /* WEST  */ placeWall(-halfHeight-.5, halfHeight-.5, halfHeight)
+  /* EAST  */ placeWall(halfWidth*2+halfHeight-.5, halfHeight-.5, halfHeight)
   for (let x=0; x<puzzleWidth; x++) for (let y=0; y<puzzleHeight; y++) {
     if (!placedPieces[y][x]) {
       let placeholderWall = placeWall(x*5+2, y*5+2, 2.5)
@@ -125,23 +144,23 @@ function initMap(level) {
 
   initPieceOptions()
 
-  // setTimeout(()=> {
-  //   for (let x=0; x<puzzleWidth; x++) for (let y=0; y<puzzleHeight; y++) {
-  //     if (!placedPieces[y][x]) {
-  //       if (x==0) mkRndPiece(3).placePiece(x, y)
-  //       else if (y==0) mkRndPiece(0).placePiece(x, y)
-  //       else if (x==12) mkRndPiece(1).placePiece(x, y)
-  //       else if (y==6) mkRndPiece(2).placePiece(x, y)
-  //       else mkRndPiece(9).placePiece(x, y)
-  //     }
-  //   }
-  // }, 5e3)
+  window.sheet = ()=> {
+    for (let x=0; x<puzzleWidth; x++) for (let y=0; y<puzzleHeight; y++) {
+      if (!placedPieces[y][x]) ((x,y)=> setTimeout(()=> {
+        if (x==0) mkRndPiece(3).placePiece(x, y)
+        else if (y==0) mkRndPiece(0).placePiece(x, y)
+        else if (x==12) mkRndPiece(1).placePiece(x, y)
+        else if (y==6) mkRndPiece(2).placePiece(x, y)
+        else mkRndPiece(9).placePiece(x, y)
+      }, (y*puzzleWidth+x)*300))(x,y)
+    }
+  }
 
   gameIsOn = true
   addGold(199 + ~~(puzzleWidth*puzzleHeight/20)*50)
   initAudio()
   startClock()
-  animate()
+  tic()
 }
 
 function initPieceOptions() {

@@ -136,6 +136,19 @@ function clickOnPlacedPiece(ev) {
 }
 
 /**
+ * Test if all spaces are filled, then open the boss gate
+ */
+const allPlacedAction = ()=> {
+  const allFilled = placedPieces.every(line =>
+    line.every(p => p)
+  )
+  if (allFilled) {
+    notify(`Lookout!!! The Lord of Death's gate will open!`)
+    setTimeout(()=> bossPiece.openGrid(), 1500)
+  }
+}
+
+/**
  * Add place to the table.
  * Some initial pieces can be setted as disabled. They will look blurry.
  */
@@ -178,6 +191,7 @@ function placePiece(px, py, enabled=true) {
   } else { // this pece Disabled.
     this.classList.add('disabled')
   }
+  allPlacedAction()
   return this
 }
 
@@ -193,8 +207,7 @@ function enablePiece() {
       if (char == 'u') el = placeWarrior(elX, elY)
       if (char == 'm') el = placeWizard(elX, elY)
       if (char  >  0 ) el = placeEnemy(elX, elY, char)
-      if (el && el.onupdate) el.onupdate()
-      if (el) el.id = char+'-'+rnd().toString(36).substr(2,3) // DEBUG
+      //if (el && el.onupdate) el.onupdate()
     })
   )
   this.querySelectorAll('u,m,e').forEach(el =>
@@ -245,17 +258,21 @@ const placeEntity = (tag, x, y, conf=walkerConf, size=2)=> {
       //transition: '.15s linear, 2s filter linear'
     }
   })
+  el.id = tag+'-'+rnd().toString(36).substr(2,3) // DEBUG
   setTimeout(()=> el.style.filter = 'none', 100)
   el.v = { x:0, y:0 }
   el.x = x + .5
   el.y = y + .5
   el.r = ((5+size)/14)/2
+  el.size = size
   el.lifeOrig = el.life = tag==='u'
                         ? 9
                         : tag==='m'
                         ? 3
                         : size
   el.classList.add('life6')
+  el.isHero = tag === 'u' || tag === 'm'
+  el.tic = 0
   el.onupdate()
   tag !== 'x' && mapEntities.push(el)
   return el

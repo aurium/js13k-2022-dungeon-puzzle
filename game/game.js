@@ -30,29 +30,25 @@ const vecOne = (vec, multplier=1)=> {
 }
 
 let hadAHitThisTurn = false
-const animate = ()=> {
-  if (gameIsOn) setTimeout(animate, 100)
+const tic = ()=> {
+  if (gameIsOn) setTimeout(tic, 100)
   debugStats.begin() // DEBUG
 
   for (let el,i=0; el=mapEntities[i]; i++) {
-    let vec2Target = vecTo(el, boidTarget)
-    let velocity2Target = vecOne(vec2Target, .1)
-    if (vecSize(vec2Target) > 2) {
-      el.v.x += velocity2Target.x
-      el.v.y += velocity2Target.y
-    } else {
-      el.v.x += velocity2Target.x/5
-      el.v.y += velocity2Target.y/5
-    }
-    el.v.x += rnd(.1)-.05
-    el.v.y += rnd(.1)-.05
-    let vel = vecSize(el.v)
-    if (vel > .2) el.v = vecOne(el.v, .2)
+    el.tic++
+    if (el.isHero) heroTic(el)
+    else enemyTic(el)
     testColision(el)
   }
   for (let el,i=0; el=mapEntities[i]; i++) {
     testColisionWall(el)
     if (el.life > 0) {
+      // Slow down big enemies:
+      if (el.size > 6) { el.v.x /= 2; el.v.y /= 2 }
+      // Prevent "NaN stop el" bug:
+      if (!el.v.x) el.v.x = 0
+      if (!el.v.y) el.v.y = 0
+      // Move it!
       el.x += el.v.x
       el.y += el.v.y
       el.onupdate()
@@ -62,6 +58,69 @@ const animate = ()=> {
   hadAHitThisTurn = false
   //queueMicrotask(()=>log('=====================================================')) // DEBUG
   debugStats.end() // DEBUG
+}
+
+const enemyTic = (enemy)=> {
+  // Die by ageing:
+  // if (enemy.tic > 10 && enemy.lifeOrig===1 && rnd()<.3) hitEntity(enemy)
+  let nearestHeroDist, vec2Hero;
+  const actDist = enemy===bossEl ? 3 : (enemy.size > 6) ? 6 : 15
+  for (let el,i=0; el=mapEntities[i]; i++) {
+    if (el.isHero && abs(el.x-enemy.x)<actDist && abs(el.y-enemy.y)<actDist) {
+      let newVec2Hero = vecTo(enemy, el)
+      let newDist = vecSize(newVec2Hero)
+      if (nearestHeroDist) {
+        if (newDist < nearestHeroDist) {
+          nearestHeroDist = newDist
+          vec2Hero = newVec2Hero
+        }
+      } else {
+        nearestHeroDist = newDist
+        vec2Hero = newVec2Hero
+      }
+    }
+  }
+  if (nearestHeroDist) {
+    let velocity2Target = vecOne(vec2Hero, .1)
+    enemy.v.x += velocity2Target.x
+    enemy.v.y += velocity2Target.y
+  } else {
+    if (enemy===bossEl) {
+      let vec2Throne = vecTo(enemy, {
+        x: (puzzleWidth-1)*5 + 1.5,
+        y: (puzzleHeight-1)*5 + 1.5
+      })
+      let velocity2Target = vecOne(vec2Throne, .1)
+      enemy.v.x += velocity2Target.x
+      enemy.v.y += velocity2Target.y
+    } else {
+      enemy.v.x *= .8
+      enemy.v.y *= .8
+    }
+  }
+  randomizeAndLimitVelocity(enemy)
+}
+
+const heroTic = (el)=> {
+  let vec2Target = vecTo(el, boidTarget)
+  let velocity2Target = vecOne(vec2Target, .1)
+  if (vecSize(vec2Target) > 2) {
+    el.v.x += velocity2Target.x
+    el.v.y += velocity2Target.y
+  } else {
+    el.v.x += velocity2Target.x/5
+    el.v.y += velocity2Target.y/5
+  }
+  randomizeAndLimitVelocity(el)
+}
+
+const randomizeAndLimitVelocity = (el)=> {
+  if (el!==bossEl) {
+    el.v.x += rnd(.1)-.05
+    el.v.y += rnd(.1)-.05
+  }
+  let vel = vecSize(el.v)
+  if (vel > .2) el.v = vecOne(el.v, .2)
 }
 
 const testColision = (el1)=> {
@@ -134,6 +193,7 @@ function gameTimeout() {
 function gameOver(message) {
   gameIsOn = false
   notify(message)
+  body.classList.add('gameover')
   mapEntities.map(el => {
     el.style.transition = (1+rnd())+'s'
     el.style.transform = `translate(${rnd(4)-2}em,${rnd(4)-2}em)`
