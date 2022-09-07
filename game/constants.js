@@ -8,7 +8,8 @@ const $ = (sel)=> document.querySelector(sel)
 const $$ = (sel)=> [...document.querySelectorAll(sel)]
 
 const mapSpaces = []
-const mapWalls = []
+const placeholders = []
+let mapWalls = []
 let mapEntities = []
 const docRoot = $(':root')
 let bossPiece = null

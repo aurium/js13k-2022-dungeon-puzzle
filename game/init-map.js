@@ -83,10 +83,34 @@ function initMap(level) {
     ' 111#'+
     '#####'
   ).placePiece(puzzleWidth-1, puzzleHeight-1, false)
-  bossPiece.mkChild('grid')
+  window.bossPiece = bossPiece // DEBUG
+  const bossGrid = bossPiece.mkChild('grid')
+  const gridWall = []
+  const bossOffsetX = (puzzleWidth-1)*5
+  const bossOffsetY = (puzzleHeight-1)*5
+  for (let x=3.4; x>0; x-=.4)
+    gridWall.push(placeWall(bossOffsetX+x, bossOffsetY+.2, .2))
+  for (let y=.6; y<3.6; y+=.4)
+    gridWall.push(placeWall(bossOffsetX+.2, bossOffsetY+y, .2))
+  bossPiece.openGrid = ()=> {
+    bossGrid.setStyle({ width: '0em', top: '1em' })
+    gridWall.map((wall, i)=> setTimeout(()=> {
+      playTone(60,  .00, 1.0, .1)
+      playTone(110, .00, 1.0, .1)
+      playTone(200, .00, 0.5, .1)
+      playTone(60,  .08, 1.0, .1)
+      playTone(110, .08, 1.0, .1)
+      playTone(200, .08, 0.5, .1)
+      mapWalls = mapWalls.filter(w => w !== wall)
+      if (wall.el) wall.el.remove() // DEBUG
+    }, (i+2)*170))
+  }
 
   for (let x=0; x<puzzleWidth; x++) for (let y=0; y<puzzleHeight; y++) {
     if (!placedPieces[y][x]) {
+      let placeholderWall = placeWall(x*5+2, y*5+2, 2.5)
+      if (!placeholders[y]) placeholders[y] = []
+      placeholders[y][x] = placeholderWall
       if (!mapSpaces[y]) mapSpaces[y] = []
       mapSpaces[y][x] = mkEl('space', {
         parent: tableTop,

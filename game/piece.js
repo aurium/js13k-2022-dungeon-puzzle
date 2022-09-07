@@ -150,6 +150,11 @@ function placePiece(px, py, enabled=true) {
     addGold(1)
     this.classList.add('disabled')
     this.enablePiece()
+    // Remove placeholder wall
+    const placeholderWall = (placeholders[py]||[])[px] || {}
+    mapWalls = mapWalls.filter(w => w !== placeholderWall)
+    if (placeholderWall.el) placeholderWall.el.remove() // DEBUG
+    // List neighbors for comming actions:
     const neighbors = getNeighbors(px, py)
     // Enable its disabled neighbors:
     trueishValues(neighbors).map(p => p.enablePiece())
@@ -184,7 +189,7 @@ function enablePiece() {
       const elX = this.x*5 + x
       const elY = this.y*5 + y
       let el = null
-      if (char == '#') mapWalls.push(placeWall(elX, elY))
+      if (char == '#') placeWall(elX, elY, .5)
       if (char == 'u') el = placeWarrior(elX, elY)
       if (char == 'm') el = placeWizard(elX, elY)
       if (char  >  0 ) el = placeEnemy(elX, elY, char)
@@ -197,12 +202,29 @@ function enablePiece() {
   )
 }
 
-function placeWall(x, y) {
-  return {
+const placeWall = (x, y, halfSize)=> {
+  /* DEBUG INI */
+  const el = mkEl('wall', {
+    parent: walkersLayerEl,
+    css: {
+      position: 'absolute',
+      left: (x-halfSize+1)+'em',
+      top: (y-halfSize+1)+'em',
+      width: halfSize*2+'em',
+      height: halfSize*2+'em',
+      background: '#00F',
+      opacity: .3,
+    }
+  })
+  /* DEBUG END */
+  const wall = {
     x: x+.5,
     y: y+.5,
-    r: .5
+    r: halfSize,
+    el // DEBUG
   }
+  mapWalls.push(wall)
+  return wall
 }
 
 const walkerConf = {
@@ -215,11 +237,13 @@ const walkerConf = {
 }
 
 const placeEntity = (tag, x, y, conf=walkerConf, size=2)=> {
-  const el = mkEl(tag, conf)
-  el.setStyle({
-    filter: 'blur(.1em) grayscale(.9)',
-    transition: '2s filter linear'
-    //transition: '.15s linear, 2s filter linear'
+  const el = mkEl(tag, {
+    ...conf,
+    css: {
+      filter: 'blur(.1em) grayscale(.9)',
+      transition: '2s filter linear'
+      //transition: '.15s linear, 2s filter linear'
+    }
   })
   setTimeout(()=> el.style.filter = 'none', 100)
   el.v = { x:0, y:0 }

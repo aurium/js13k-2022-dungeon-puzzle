@@ -145,9 +145,7 @@ function gameOver(message) {
 }
 window.gameOver = gameOver //DEBUG
 
-// Let the player to sheet
-console.log('Hi smart user, you can run %c addGold(<num>) %c and buy more pieces.', 'background:#000;color:#FFF', '')
-window.addGold = function addGold(coins=0, playSound) {
+function addGold(coins=0, playSound) {
   if (playSound) for (let i=0; i<4; i++) {
     playTone(2000, .5 + i/20, .6, .5)
     playTone(8000, .5 + i/20, .1, .5)
@@ -155,6 +153,9 @@ window.addGold = function addGold(coins=0, playSound) {
   gold += coins
   $('gold').innerHTML = `<b>🪙</b> ${gold} coins`
 }
+// Let the player to sheet
+console.log('Hi smart user, you can run %c addGold(<num>) %c and buy more pieces.', 'background:#000;color:#FFF', '')
+window.addGold = addGold
 
 function getNeighbors(x, y) {
   return {

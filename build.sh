@@ -56,7 +56,7 @@ if ! $DEV_MODE; then
   recursiveParentheses="([^()]*\([^()]*$recursiveParentheses*[^()]*\)[^()]*)"
   # Cleanup debug snippets
   sed -ri "
-    s!(^|[^_a-zA-Z0-9])log\([^()]*$recursiveParentheses*\)!\1void(0)!g;
+    s!(^|[^._a-zA-Z0-9])log\([^()]*$recursiveParentheses*\)!\1void(0)!g;
     s!.*//\s*DEBUG!// EX DEBUG!;
   " *.js
   sed -ri "
@@ -65,7 +65,7 @@ if ! $DEV_MODE; then
   sed -ri "
     s/.*<!--\s*DEBUG\s*-->.*//;
   " *.html
-  if egrep -C5 --color "(^|[^_a-zA-Z0-9])log\(" *.js; then
+  if egrep -C5 --color "(^|[^._a-zA-Z0-9])log\(" *.js; then
     echo "Ups... The log() remover fail. My bad. :-(" >&2
     exit 1
   fi

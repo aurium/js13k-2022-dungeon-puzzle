@@ -510,9 +510,11 @@ grid {
   left: .2em;
   width: 1em;
   height: 1em;
-  border-radius: 0.15em;
+  border-radius: 0.15em 0 0 0;
   border: 2px dotted #322;
+  border-right: none;
   filter: drop-shadow(-1px -1px #666);
+  transition: width 1.5s linear, top 1.5s 1.5s linear;
 }
 
 news {
