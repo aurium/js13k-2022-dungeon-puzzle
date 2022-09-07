@@ -32,29 +32,29 @@ function mkRndPiece(border = -1, conns, terrain) {
   return mkPiece(N+E+S+W, terrain, map)
 }
 
-function mkNewRndMap(N,E,S,W) {
-  const map = ['','','','','']
-  for (let x=0; x<5; x++) for (let y=0; y<5; y++) {
-    map[y] += rnd()<.25 ? '#' : ' '
-  }
-  if (N=='-') map[0] = '#####'
-  if (S=='-') map[4] = '#####'
-  if (W=='-') for (let y=0; y<5; y++) map[y] = '#' + map[y].substring(1)
-  if (E=='-') for (let y=0; y<5; y++) map[y] = map[y].substring(0,4) + '#'
-  return map
-}
+// function mkNewRndMap(N,E,S,W) {
+//   const map = ['','','','','']
+//   for (let x=0; x<5; x++) for (let y=0; y<5; y++) {
+//     map[y] += rnd()<.25 ? '#' : ' '
+//   }
+//   if (N=='-') map[0] = '#####'
+//   if (S=='-') map[4] = '#####'
+//   if (W=='-') for (let y=0; y<5; y++) map[y] = '#' + map[y].substring(1)
+//   if (E=='-') for (let y=0; y<5; y++) map[y] = map[y].substring(0,4) + '#'
+//   return map
+// }
 
 function mkRndMap(N,E,S,W, presetProb) {
   let map
-  if (rnd() < presetProb) {
+  // if (rnd() < presetProb) {
     let key = 'in'
     if (N=='-') key = 'N'
     if (S=='-') key = 'S'
     if (W=='-') key = 'W'
     if (E=='-') key = 'E'
     map = arrRnd(MAPS[key]).map(line => ''+line)
-  }
-  else map = mkNewRndMap(N,E,S,W)
+  // }
+  // else map = mkNewRndMap(N,E,S,W)
   for (let x=0; x<5; x++) for (let y=0; y<5; y++) {
     let line = map[y].split('')
     if (
