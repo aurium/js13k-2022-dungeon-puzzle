@@ -132,14 +132,14 @@ article :is(div, ul) {
   width: calc(var(--pW)*100px);
   height: calc(var(--pH)*100px);
   transition: opacity 1s;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 article.hide :is(div, ul) {
   opacity: 0;
 }
-.gameover article :is(div, ul) {
+/* .gameover article :is(div, ul) {
   overflow: visible;
-}
+} */
 .gameover article wall {
   display: none;
 }

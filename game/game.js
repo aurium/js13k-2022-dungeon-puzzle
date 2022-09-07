@@ -51,6 +51,10 @@ const tic = ()=> {
       // Move it!
       el.x += el.v.x
       el.y += el.v.y
+      if (el.x < 0 ||
+          el.y < 0 ||
+          el.x > puzzleWidth*5 ||
+          el.y > puzzleHeight*5) hitEntity(el)
       el.onupdate()
     }
   }
@@ -81,7 +85,7 @@ const enemyTic = (enemy)=> {
     }
   }
   if (nearestHeroDist) {
-    let velocity2Target = vecOne(vec2Hero, .1)
+    let velocity2Target = vecOne(vec2Hero, .05)
     enemy.v.x += velocity2Target.x
     enemy.v.y += velocity2Target.y
   } else {
@@ -90,7 +94,7 @@ const enemyTic = (enemy)=> {
         x: (puzzleWidth-1)*5 + 1.5,
         y: (puzzleHeight-1)*5 + 1.5
       })
-      let velocity2Target = vecOne(vec2Throne, .1)
+      let velocity2Target = vecOne(vec2Throne, .05)
       enemy.v.x += velocity2Target.x
       enemy.v.y += velocity2Target.y
     } else {
@@ -103,7 +107,7 @@ const enemyTic = (enemy)=> {
 
 const heroTic = (el)=> {
   let vec2Target = vecTo(el, boidTarget)
-  let velocity2Target = vecOne(vec2Target, .1)
+  let velocity2Target = vecOne(vec2Target, .05)
   if (vecSize(vec2Target) > 2) {
     el.v.x += velocity2Target.x
     el.v.y += velocity2Target.y
@@ -135,13 +139,13 @@ const testColision = (el1)=> {
       }
     } else { // Friends
       if (dist < minDist*1.5) {
-        vec = vecOne(vec, .05)
+        vec = vecOne(vec, .02)
         el1.v.x -= vec.x
         el1.v.y -= vec.y
       }
     }
     if (dist < minDist) {
-      vec = vecOne(vec, .1)
+      vec = vecOne(vec, .05)
       el1.v.x = -vec.x
       el1.v.y = -vec.y
     }
