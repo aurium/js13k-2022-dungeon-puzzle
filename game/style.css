@@ -482,6 +482,35 @@ m i {
   transition: .2s, opacity 20s 20s, filter 10s, z-index 1s !important;
 }
 
+fb { /* Wizard's fireball */
+  width: .4em;
+  height: .4em;
+  z-index: 9;
+}
+fb::before {
+  width: .4em;
+  height: .4em;
+  transform: translate(var(--dx), var(--dy));
+  border-radius: 50%;
+  background: radial-gradient(#A00, transparent 70%);
+}
+fb::after {
+  width: .4em;
+  height: .4em;
+  border-radius: 50%;
+  background: radial-gradient(#FF0,#F80, rgba(255,0,0,.5),transparent 70%);
+}
+fb.boom::before {
+  display: none;
+}
+fb.boom::after {
+  width: 1em;
+  height: 1em;
+  transform: translate(-.3em, -.3em);
+  opacity: 0;
+  transition: 1s, opacity .5s .5s;
+}
+
 article x {
   width: 24px;
   height: 24px;

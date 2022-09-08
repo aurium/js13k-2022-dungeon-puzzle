@@ -158,11 +158,22 @@ function initMap(level) {
     }
   }
 
-  delayedNotify(15, `The Lord of Death's dungeon is southeastern corner of unknown lands.`)
-  delayedNotify(20, 'You will recognize the Lord of Death by their emerald crown.')
-  delayedNotify(25, `Don't confuse him with your generals, who wear a onyx crown.`)
-  delayedNotify(30, `Nor with his son, who wear the silver crown.`)
-  delayedNotify(35, 'Kill the Lord of Death and all undead will vanish with him.')
+  delayedNotify(10, `The Lord of Death's dungeon is southeastern corner of unknown lands.`,
+               {iniTop: 90, top: 48, dur: 10})
+  delayedNotify(11, 'You will recognize the Lord of Death by their emerald crown.',
+               {iniTop: 90, top: 55, dur: 11})
+  delayedNotify(12, `Don't confuse him with your generals, who wear a onyx crown.`,
+               {iniTop: 90, top: 62, dur: 12})
+  delayedNotify(13, `Nor with his son, who wear the silver crown.`,
+               {iniTop: 90, top: 69, dur: 13})
+  delayedNotify(14, 'Kill the Lord of Death and all undead will vanish with him.',
+               {iniTop: 90, top: 76, dur: 14})
+
+  delayedNotify(50, 'The woods told two more wizards are kidnapped!',
+               {iniTop: 90, top: 50, dur: 9})
+  delayedNotify(52, 'You can find they on the other edges of unknown lands.',
+               {iniTop: 90, top: 57, dur: 9})
+
   gameIsOn = true
   addGold(199 + ~~(puzzleWidth*puzzleHeight/20)*50)
   initAudio()

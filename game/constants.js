@@ -10,7 +10,8 @@ const $$ = (sel)=> [...document.querySelectorAll(sel)]
 const mapSpaces = []
 const placeholders = []
 let mapWalls = []
-let mapEntities = []
+const mapBoids = { heroes: [], enemies: [] }
+let fireballs = []
 const docRoot = $(':root')
 let bossPiece = null
 let bossEl = null

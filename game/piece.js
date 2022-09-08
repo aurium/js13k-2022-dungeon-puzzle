@@ -244,8 +244,8 @@ const walkerConf = {
   child: ['i', ''],
   parent: walkersLayerEl,
   onupdate() {
-    this.style.left = (this.x*20) + 'px'
-    this.style.top  = (this.y*20) + 'px'
+    this.style.left = this.x + 'em'
+    this.style.top  = this.y + 'em'
   }
 }
 
@@ -272,9 +272,12 @@ const placeEntity = (tag, x, y, conf=walkerConf, size=2)=> {
                         : size
   el.classList.add('life6')
   el.isHero = tag === 'u' || tag === 'm'
+  if (tag !== 'x') {
+    el.group = el.isHero ? 'heroes' : 'enemies'
+    mapBoids[el.group].push(el)
+  }
   el.tic = 0
   el.onupdate()
-  tag !== 'x' && mapEntities.push(el)
   return el
 }
 

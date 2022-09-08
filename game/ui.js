@@ -109,6 +109,7 @@ setInterval(()=> notifyY = Math.min(notifyY+1, 45), 1500)
 // Show some notification to the user.
 const notify = (text, opts={})=> {
   const notification = mkEl('news', { text, parent: body })
+  notification.style.top = (opts.iniTop||0)+'vh'
   log('Notification:', text)
   notifyY -= 5
   if (notifyY < 25) notifyY = 50
@@ -117,13 +118,13 @@ const notify = (text, opts={})=> {
     notification.setStyle({ opacity: 1, top: (opts.top||notifyY)+'vh' })
   }, 100)
   if (!opts.noRemove) {
-    setTimeout(()=> notification.style.opacity = 0, 4000)
-    setTimeout(()=> notification.remove(), 6000)
+    setTimeout(()=> notification.style.opacity = 0, (opts.dur||4)*1000)
+    setTimeout(()=> notification.remove(), (opts.dur||4)*1000+2000)
   }
   return notification
 }
 
-const delayedNotify = (sec, text)=> setTimeout(()=> notify(text), sec*1000)
+const delayedNotify = (sec, text, opts)=> setTimeout(()=> notify(text, opts), sec*1000)
 
 /* * * Clock * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
