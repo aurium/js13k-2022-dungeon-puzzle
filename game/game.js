@@ -211,7 +211,18 @@ const killBoss = ()=> {
 
 const youWin = ()=> {
   gameIsOn = false
-  notify('Celebrate! You Win!')
+  const elapsedTime = Date.now() - startTime
+  const minutes = ~~(elapsedTime / 60_000)
+  const seconds = ~~((elapsedTime - minutes*60_000) / 1000)
+  const notification = notify('Celebrate! You Win!', { noRemove:1, top:5, class:'win' })
+  const tweet = escape(
+    `I took ${minutes} minutes and ${seconds} seconds to finish the Dungeon Puzzle,` +
+    ` in ${gameLevel} mode! https://js13kgames.com/entries/dungeon-puzzle` +
+    ` #js13k`
+  )
+  notification.innerHTML += `<br>
+  <a href="https://twitter.com/intent/tweet?text=${tweet}">Share with your friends <b>🐦</b></a>
+  `
 }
 
 // Will be called by the clock after 13 munutes.

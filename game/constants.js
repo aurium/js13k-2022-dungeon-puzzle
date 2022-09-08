@@ -19,6 +19,7 @@ let puzzleWidth, puzzleHeight
 let rndEnemyChance, bigEnemyProp = .2
 let placedPieces
 
+let gameLevel
 let gameIsOn = false
 let startTime
 
