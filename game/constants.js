@@ -14,6 +14,7 @@ let mapEntities = []
 const docRoot = $(':root')
 let bossPiece = null
 let bossEl = null
+let bossKilled = false
 let puzzleWidth, puzzleHeight
 let rndEnemyChance, bigEnemyProp = .2
 let placedPieces

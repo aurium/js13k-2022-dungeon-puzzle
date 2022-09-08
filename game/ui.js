@@ -107,7 +107,7 @@ let notifyY = 45 // Vary the notification position to prevent overlap.
 // step-by-step put the notifyY back to the original position while not used:
 setInterval(()=> notifyY = Math.min(notifyY+1, 45), 1500)
 // Show some notification to the user.
-function notify(text) {
+const notify = (text)=> {
   const notification = mkEl('news', { text, parent: body })
   log('Notification:', text)
   notifyY -= 5
@@ -118,6 +118,8 @@ function notify(text) {
   setTimeout(()=> notification.style.opacity = 0, 4000)
   setTimeout(()=> notification.remove(), 6000)
 }
+
+const delayedNotify = (sec, text)=> setTimeout(()=> notify(text), sec*1000)
 
 /* * * Clock * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

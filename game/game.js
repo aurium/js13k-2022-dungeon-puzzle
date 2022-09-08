@@ -175,21 +175,47 @@ const areEnemies = (el1, el2)=> {
 const hitEntity = (el)=> {
   hadAHitThisTurn = true
   el.life--
+  updateLifeDisplay(el)
+  //log(el.id,'lost',el.className, el.x.toFixed(2), el.y.toFixed(2), el.parentNode)
+  if (el.life <= 0) justKill(el, true)
+}
+
+const updateLifeDisplay = (el)=> {
   el.className = el.className.replace(
     /life./,
     `life${(el.life <= 0) ? 0 : ~~(el.life*5/el.lifeOrig)+1}`
   )
-  //log(el.id,'lost',el.className, el.x.toFixed(2), el.y.toFixed(2), el.parentNode)
-  if (el.life <= 0) {
-    //queueMicrotask(()=> log('DEAD:', el.id, el.x.toFixed(2), el.y.toFixed(2))) // DEBUG
-    queueMicrotask(()=> mapEntities = mapEntities.filter(el2 => el2 !== el))
-    setTimeout(()=> el.parentNode && el.remove(), 40_000)
-    if (el.tagName === 'E') addGold(el.lifeOrig, true)
-  }
+}
+
+const justKill = (el, giveGold)=> {
+  el.life = 0
+  updateLifeDisplay(el)
+  //queueMicrotask(()=> log('DEAD:', el.id, el.x.toFixed(2), el.y.toFixed(2))) // DEBUG
+  queueMicrotask(()=> mapEntities = mapEntities.filter(el2 => el2 !== el))
+  setTimeout(()=> el.parentNode && el.remove(), 40_000)
+  if (el.tagName === 'E' && giveGold) addGold(el.lifeOrig, true)
+  if (el === bossEl) killBoss()
+}
+
+const killBoss = ()=> {
+  bossKilled = true
+  notify('The Lord of Death has vanished, now all undead slaves will dismantle in the ground.')
+  let t = 0
+  mapEntities.map(el => {
+    if (!el.isHero && el.life) {
+      setTimeout(()=> justKill(el), ++t*333)
+    }
+  })
+  setTimeout(youWin, t*333+2000)
+}
+
+const youWin = ()=> {
+  gameIsOn = false
+  notify('Celebrate! You Win!')
 }
 
 // Will be called by the clock after 13 munutes.
-function gameTimeout() {
+const gameTimeout = ()=> {
   gameOver('Your time is over.')
   playAlarm()
 }

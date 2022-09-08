@@ -156,6 +156,11 @@ function initMap(level) {
     }
   }
 
+  delayedNotify(15, 'The Lord of Death is southeastern corner of unknown lands.')
+  delayedNotify(20, 'You will recognize the Lord of Death by their emerald crown.')
+  delayedNotify(25, `Don't confuse him with your generals, who wear a onyx crown.`)
+  delayedNotify(30, `Nor with his son, who wear the silver crown.`)
+  delayedNotify(35, 'Kill the Lord of Death and all undead will vanish with him.')
   gameIsOn = true
   addGold(199 + ~~(puzzleWidth*puzzleHeight/20)*50)
   initAudio()
