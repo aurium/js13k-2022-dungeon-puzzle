@@ -210,6 +210,18 @@ const killBoss = ()=> {
 }
 
 const youWin = ()=> {
+  // Music:
+  const base = 660
+  const inc = 100
+  for (let t=0; t<3; t+=1.1) {
+    for (let n=0; n<3; n++) {
+      playTone(base+(t+n)*inc,     t+n*.175, 1.0, .25)
+      playTone((base+(t+n)*inc)*5, t+n*.175, 0.2, .25)
+    }
+    playTone(base+(t+4)*inc,     t+.525, 1.0, .8+t/4)
+    playTone((base+(t+4)*inc)*5, t+.525, 0.2, .8+t/4)
+  }
+
   gameIsOn = false
   const elapsedTime = Date.now() - startTime
   const minutes = ~~(elapsedTime / 60_000)
