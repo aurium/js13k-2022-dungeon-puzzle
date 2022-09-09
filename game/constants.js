@@ -22,7 +22,7 @@ let placedPieces
 
 let gameLevel
 let gameIsOn = false
-let startTime
+let startTime, realStartTime
 
 const body = document.body
 const avaliableBox = $('#avaliable')

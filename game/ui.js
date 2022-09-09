@@ -132,16 +132,16 @@ const clockPointer = mkEl('cp', { parent: $('clock') })
 const clockPointerShadow = mkEl('cp', { parent: $('clock'), class: 'shadow' })
 const turnsCounter = mkEl('b', { parent: $('clock') })
 
-function startClock() {
-  startTime = Date.now()
+const startClock = ()=> {
+  realStartTime = startTime = Date.now()
   updateClock()
+  setTimeout(goldInterval, 30_000)
   playTicTac()
 }
 
-function updateClock() {
+const updateClock = ()=> {
   const elapsedTime = Date.now() - startTime
   let clockTurn = elapsedTime / 60_000
-  turnsCounter.innerText = 'Turn ' + ~~(clockTurn+1)
   if (clockTurn < 13) {
     if (gameIsOn) setTimeout(updateClock, 500)
   } else {
@@ -150,7 +150,21 @@ function updateClock() {
     gameTimeout()
   }
   if (~~clockTurn === 12) turnsCounter.style.color = '#A55'
+  turnsCounter.innerText = 'Turn ' + ~~(clockTurn+1)
   clockPointer.style.transform =
   clockPointerShadow.style.transform =
   `rotate(${clockTurn}turn)`
+  if (elapsedTime < 60_000) btBuyTime.setAttribute('disabled', true)
+  else btBuyTime.removeAttribute('disabled')
+}
+
+const goldInterval = ()=> {
+  if (gameIsOn) setTimeout(goldInterval, 10_000)
+  addGold(1)
+}
+
+window.buyTime = ()=> {
+  notify('Rollback one clock turn for 10 gold coins.')
+  startTime += 60_000
+  addGold(-10)
 }

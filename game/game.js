@@ -303,13 +303,13 @@ const youWin = ()=> {
     playTone((base+(t+4)*inc)*5, t+.525, 0.2, .8+t/4)
   }
 
-  const elapsedTime = Date.now() - startTime
+  const elapsedTime = Date.now() - realStartTime
   const minutes = ~~(elapsedTime / 60_000)
   const seconds = ~~((elapsedTime - minutes*60_000) / 1000)
   const notification = notify('Celebrate! You Win!', { noRemove:1, top:5, class:'win' })
   const tweet = escape(
     `I took ${minutes} minutes and ${seconds} seconds to finish the Dungeon Puzzle,` +
-    ` in ${gameLevel} mode! https://js13kgames.com/entries/dungeon-puzzle` +
+    ` on ${gameLevel} mode! https://js13kgames.com/entries/dungeon-puzzle` +
     ` #js13k`
   )
   notification.innerHTML += `<br>
@@ -339,7 +339,7 @@ function gameOver(message) {
 }
 window.gameOver = gameOver //DEBUG
 
-function addGold(coins=0, playSound) {
+const addGold = (coins=0, playSound)=> {
   if (playSound) for (let i=0; i<4; i++) {
     playTone(2000, .5 + i/20, .6, .5)
     playTone(8000, .5 + i/20, .1, .5)
