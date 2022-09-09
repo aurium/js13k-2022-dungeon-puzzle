@@ -216,8 +216,9 @@ function enablePiece() {
 }
 
 const placeWall = (x, y, halfSize)=> {
+  let el
   /* DEBUG INI */
-  const el = mkEl('wall', {
+  if (showDebug) el = mkEl('wall', {
     parent: walkersLayerEl,
     css: {
       position: 'absolute',

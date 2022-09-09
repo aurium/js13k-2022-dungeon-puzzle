@@ -6,6 +6,9 @@ const rnd = (mult=1)=> Math.random()*mult
 const arrRnd = (arr)=> arr[floor(rnd(arr.length))]
 const $ = (sel)=> document.querySelector(sel)
 const $$ = (sel)=> [...document.querySelectorAll(sel)]
+const showDebug =
+      !!document.location.search.match(/debug/) || // DEBUG
+      false;
 
 const mapSpaces = []
 const placeholders = []

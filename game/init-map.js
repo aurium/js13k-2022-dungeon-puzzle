@@ -123,10 +123,10 @@ function initMap(level) {
   // Place protection walls. So entities can't escape:
   const halfWidth = puzzleWidth*5/2
   const halfHeight = puzzleHeight*5/2
-  /* NORT  */ placeWall(halfWidth-.5, -halfWidth-.5, halfWidth)
-  /* SOUTH */ placeWall(halfWidth-.5, halfHeight*2+halfWidth-.5, halfWidth)
-  /* WEST  */ placeWall(-halfHeight-.5, halfHeight-.5, halfHeight)
-  /* EAST  */ placeWall(halfWidth*2+halfHeight-.5, halfHeight-.5, halfHeight)
+  /* NORT  */ placeWall(halfWidth-.5, -halfWidth, halfWidth)
+  /* SOUTH */ placeWall(halfWidth-.5, halfHeight*2+halfWidth-1, halfWidth)
+  /* WEST  */ placeWall(-halfHeight, halfHeight-.5, halfHeight)
+  /* EAST  */ placeWall(halfWidth*2+halfHeight-1, halfHeight-.5, halfHeight)
   for (let x=0; x<puzzleWidth; x++) for (let y=0; y<puzzleHeight; y++) {
     if (!placedPieces[y][x]) {
       let placeholderWall = placeWall(x*5+2, y*5+2, 2.5)
