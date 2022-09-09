@@ -337,7 +337,7 @@ function gameOver(message) {
     piece.style.transform = `translate(${rnd(.4)-.2}em,${rnd(.4)-.2}em) rotate(${rnd(.4)-.2}turn)`
   })
 }
-window.gameOver = gameOver //DEBUG
+window.gameOver = gameOver
 
 const addGold = (coins=0, playSound)=> {
   if (playSound) for (let i=0; i<4; i++) {
