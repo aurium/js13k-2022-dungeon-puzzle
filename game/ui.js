@@ -153,18 +153,24 @@ const startClock = ()=> {
   playTicTac()
 }
 
+let clockTic = 0
 const updateClock = ()=> {
+  clockTic++
   const elapsedTime = Date.now() - startTime
   let clockTurn = elapsedTime / 60_000
   if (clockTurn < 13) {
     if (gameIsOn) setTimeout(updateClock, 500)
+    turnsCounter.innerText = 'Turn ' + ~~(clockTurn+1)
+    if (clockTurn > 12 && clockTic%2 == 0) {
+      const gain = ((elapsedTime%60_000) / 120_000) ** 2
+      playTone(900 + (clockTic%4)*200, .0, gain, .2)
+      playTone(400                   , .1, gain, .1)
+    }
   } else {
-    clockTurn = 13
     turnsCounter.innerText = 'Timeout'
     gameTimeout()
   }
-  if (~~clockTurn === 12) turnsCounter.style.color = '#A55'
-  turnsCounter.innerText = 'Turn ' + ~~(clockTurn+1)
+  turnsCounter.style.color = (clockTurn > 12) ? '#A55' : null
   clockPointer.style.transform =
   clockPointerShadow.style.transform =
   `rotate(${clockTurn}turn)`
