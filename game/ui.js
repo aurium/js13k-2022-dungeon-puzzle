@@ -163,8 +163,18 @@ const goldInterval = ()=> {
   addGold(1)
 }
 
+let lastBuyTimeCost = 5
 window.buyTime = ()=> {
-  notify('Rollback one clock turn for 10 gold coins.')
-  startTime += 60_000
-  addGold(-10)
+  const cost = lastBuyTimeCost * 2
+  if (cost > gold) {
+    notify(
+      `You have no enough gold.\n` +
+      `You need ${cost} gold coins to rollback one clock turn.`
+    )
+  } else if (confirm(`It will cost you ${cost} gold coins.\nAre you sure?`)) {
+    notify(`Rollback one clock turn for ${cost} gold coins.`)
+    startTime += 60_000
+    addGold(-cost)
+    lastBuyTimeCost = cost
+  }
 }

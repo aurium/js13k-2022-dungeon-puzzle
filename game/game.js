@@ -309,7 +309,6 @@ const killBoss = ()=> {
 
 const youWin = ()=> {
   if (!gameIsOn) return;
-  gameIsOn = false
 
   // Music:
   const base = 660
@@ -335,6 +334,7 @@ const youWin = ()=> {
   notification.innerHTML += `<br>
   <a href="https://twitter.com/intent/tweet?text=${tweet}">Share with your friends <b>🐦</b></a>
   `
+  gameEnded()
 }
 
 // Will be called by the clock after 13 munutes.
@@ -343,9 +343,8 @@ const gameTimeout = ()=> {
   playAlarm()
 }
 
-function gameOver(message) {
+const gameOver = (message)=> {
   if (!gameIsOn) return;
-  gameIsOn = false
   notify(message)
   body.classList.add('gameover')
   allMapEntities.map(el => {
@@ -356,10 +355,18 @@ function gameOver(message) {
     piece.style.transition = (1+rnd())+'s'
     piece.style.transform = `translate(${rnd(.4)-.2}em,${rnd(.4)-.2}em) rotate(${rnd(.4)-.2}turn)`
   })
+  gameEnded()
+}
+
+const gameEnded = ()=> {
+  gameIsOn = false
   $('ctrl').style.pointerEvents = 'none'
   $('article').style.pointerEvents = 'none'
 }
-window.gameOver = gameOver
+
+window.giveUp = ()=> {
+  if (confirm('Are you sure?')) gameOver('I give up!')
+}
 
 const addGold = (coins=0, playSound)=> {
   if (playSound) for (let i=0; i<4; i++) {
