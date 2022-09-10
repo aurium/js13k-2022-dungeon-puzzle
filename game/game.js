@@ -256,7 +256,7 @@ const hitEntity = (el)=> {
   hadAHitThisTurn = true
   el.life--
   updateLifeDisplay(el)
-  //log(el.id,'lost',el.className, el.x.toFixed(2), el.y.toFixed(2), el.parentNode)
+  log(el.id, 'Bleed', el.className, el.life)
   if (el.life <= 0) justKill(el, true)
 }
 
@@ -336,6 +336,8 @@ function gameOver(message) {
     piece.style.transition = (1+rnd())+'s'
     piece.style.transform = `translate(${rnd(.4)-.2}em,${rnd(.4)-.2}em) rotate(${rnd(.4)-.2}turn)`
   })
+  $('ctrl').style.pointerEvents = 'none'
+  $('article').style.pointerEvents = 'none'
 }
 window.gameOver = gameOver
 

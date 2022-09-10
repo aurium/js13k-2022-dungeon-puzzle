@@ -266,10 +266,11 @@ const placeEntity = (tag, x, y, conf=walkerConf, size=2)=> {
   el.y = y + .5
   el.r = ((5+size)/14)/2
   el.size = size
-  el.lifeOrig = el.life = tag==='u'
-                        ? 9
-                        : tag==='m'
-                        ? 3
+  el.lifeOrig = el.life = tag==='u' ? 9
+                        : tag==='m' ? 3
+                        : size === 7 ? 20
+                        : size === 8 ? 30
+                        : size === 9 ? 40
                         : size
   el.classList.add('life6')
   el.isHero = tag === 'u' || tag === 'm'
