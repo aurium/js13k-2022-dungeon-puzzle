@@ -28,12 +28,12 @@
         or we all will become their slaves.
       </p>
       <p>Now, choose the task difficulty:</p>
-      <lvl-opts>
+      <btG class="lvl-opts">
         <button onclick="initMap('easy')">Easy</button>
         <button onclick="initMap('medium')">Medium</button>
         <button onclick="initMap('hard')">Hard</button>
-        <button onclick="$('lvl-opts').style.display='none';$('conf-lvl').style.display='block'">Custom</button>
-      </lvl-opts>
+        <button onclick="$('.lvl-opts').style.display='none';$('conf-lvl').style.display='block'">Custom</button>
+      </btG>
       <conf-lvl style="display:none">
         <label><span>Width:</span><input id="conf-width" value="13" type="number" min="5"></label>
         <label><span>Height:</span><input id="conf-height" value="7" type="number" min="5"></label>
@@ -44,17 +44,29 @@
   </bg>
   <ctrl>
     <gold></gold>
-    <act>
-      <button>craven</button><button>defensive</button><button>aggressive</button>
-    </act>
-    <div id="avaliable"></div>
+    <btG class="act">
+      <button>craven</button>
+      <button>defensive</button>
+      <button>aggressive</button>
+    </btG>
+    <hr>
     <magic>
       <h2>Magic</h2>
-      <button>Regenerate</button>
-      <button>Freeze</button>
+      <btG>
+        <button>Regenerate</button>
+        <button>Freeze</button>
+      </btG>
     </magic>
-    <button onclick="buyTime()" id="btBuyTime">Buy Time</button>
-    <button onclick="gameOver('I give up!')">Give up</button>
+    <hr>
+    <div id="avaliable"></div>
+    <hr>
+    <special>
+      <h2>You shouldn't...</h2>
+      <btG>
+        <button onclick="buyTime()" id="btBuyTime">Buy Time</button>
+        <button onclick="gameOver('I give up!')">Give up</button>
+      </btG>
+    </special>
   </ctrl>
   <article class="hide">
     <div></div> <!-- Layer where pieces are placed -->

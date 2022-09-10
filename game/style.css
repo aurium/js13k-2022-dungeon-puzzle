@@ -40,58 +40,80 @@ body button[disabled] {
   opacity: 0.5;
 }
 
+btG {
+  display: block;
+  white-space: nowrap;
+}
+btG button {
+  position: relative;
+  padding: 2px 8px;
+  margin: 0 -1px 0 0;
+  border-radius: 0;
+}
+btG button:first-child {
+  border-radius: 8px 0 0 8px;
+  padding-left: 10px;
+}
+btG button:last-child {
+  border-radius: 0 8px 8px 0;
+  padding-right: 10px;
+}
+
 ctrl {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   color: #210;
   background: #666;
   box-shadow: inset 0 0 50px #222, 10px 10px 50px #000;
-  display: block;
   position: absolute;
   top: calc(var(--vm)*5);
   bottom: calc(var(--vm)*5);
   left: calc(var(--vm)*5);
   width: 230px;
-  padding: 30px;
   border-radius: 6px;
   z-index: 10;
 }
+
+ctrl:before, ctrl:after {
+  position: static;
+}
+ctrl hr {
+  margin: 0;
+  border: none;
+}
+
+ctrl > * {
+  margin: 0 0 0 25px;
+}
+
+ctrl h2 {
+  font-size: 1em;
+}
+
 #avaliable {
   position: relative;
-  left: -15px;
+  left: -10px;
   width: 200px;
   height: 470px;
-  margin: 15px 0;
   font-size: 100px;
 }
 
 gold b {
   text-shadow: 1px 1px 2px #000;
 }
-act {
-  display: block;
-  margin: 5px -35px;
-  white-space: nowrap;
+.act {
+  margin: 0 0 0 -10px;
   transform: scale(.8, 1);
 }
-act button {
-  position: relative;
-  padding: 2px 8px;
-  margin-left: -1px;
-  border-radius: 0;
-}
-act button:first-child {
-  border-radius: 8px 0 0 8px;
-}
-act button:last-child {
-  border-radius: 0 8px 8px 0;
-}
-act button.active {
+.act button.active {
   background: #06A;
   box-shadow: 0 0 12px #07F, 0 0 14px #07F;
   border: 1px solid #8CF;
   z-index: 2;
 }
-magic button {
-  display: block;
+.act button.active:hover {
+  background: #06A;
 }
 
 article {

@@ -94,14 +94,14 @@ window.addEventListener('mouseover', (ev)=> {
   overPlace = []
 })
 
-$$('act button').map(btn =>
+$$('.act button').map(btn =>
   btn.onclick = ()=> {
-    $$('act button').map(b => b.className='')
+    $$('.act button').map(b => b.className='')
     btn.className = 'active'
     act = btn.innerText
   }
 )
-$('act button:nth-child(2)').click()
+$('.act button:nth-child(2)').click()
 
 let notifyY = 45 // Vary the notification position to prevent overlap.
 // step-by-step put the notifyY back to the original position while not used:
