@@ -38,6 +38,7 @@ const trueishValues = (obj)=> Object.values(obj).filter(val => val)
 
 let gold = 0
 let act = 'defensive'
+let frozen = false
 const tableTop = $('article div')
 
 const MAPS = {

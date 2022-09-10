@@ -153,22 +153,19 @@ article {
   z-index: 5;
 }
 
-article div, #avaliable {
+article > div, #avaliable {
   filter: drop-shadow(.01em .01em .02em rgba(0,0,0,.9));
 }
-article :is(div, ul) {
+article > :is(div, ul) {
   position: absolute;
   width: calc(var(--pW)*100px);
   height: calc(var(--pH)*100px);
   transition: opacity 1s;
   /* overflow: hidden; */
 }
-article.hide :is(div, ul) {
+article.hide > :is(div, ul) {
   opacity: 0;
 }
-/* .gameover article :is(div, ul) {
-  overflow: visible;
-} */
 .gameover article wall {
   display: none;
 }
@@ -233,11 +230,12 @@ article p, #avaliable p {
   --W: 8% 92%;
   clip-path: polygon(var(--N), var(--E), var(--S), var(--W));
   z-index: 2;
-  transition: 2s;
+  filter: sepia(0) hue-rotate(0) blur(0) grayscale(0);
+  transition: 2s, filter 1.3s;
 }
 
 p.disabled {
-  filter: blur(.02em) grayscale(1);
+  filter: sepia(0) hue-rotate(0) blur(.02em) grayscale(1);
 }
 
 #avaliable p {
@@ -414,6 +412,12 @@ e i {
   height: var(--size);
   transform: translate(calc( (1em - var(--size)) / 2 ), calc( (1em - var(--size)) / 2 ));
   background: radial-gradient(at 30% 30%, #674, #010);
+  filter: sepia(0) hue-rotate(0);
+  transition: filter 1s;
+}
+
+.frozen > div p:not(.disabled), .frozen e i {
+  filter: sepia(1) hue-rotate(150deg);
 }
 
 .e1 { --size: 0.40em }

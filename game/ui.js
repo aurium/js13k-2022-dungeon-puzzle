@@ -61,6 +61,7 @@ function endDragAvaliablePiece(ev) {
     const {x, y} = dragingPiece
     dragingPiece.btReplace.remove()
     setTimeout(()=> configPieceOption(mkRndPiece(), x, y), 500)
+    dragingPiece.style.transition = null
     dragingPiece.removeEventListener('mousedown', initDragAvaliablePiece)
     dragingPiece.placePiece(...overPlace)
   } else {
@@ -108,12 +109,25 @@ const magicFreezeBtn = $('#magic-frz')
 
 let firstRegenerateCast = true
 magicRegenerateBtn.onclick = ()=> {
-  magicRegenerateBtn.disabled = true
-  setTimeout(()=> magicRegenerateBtn.disabled = false, 30_000)
-  castMagicRegenerate()
-  if (firstRegenerateCast) {
-    delayedNotify(3, 'It will take a half clock turn until you can cast regenerate again.')
-    firstRegenerateCast = false
+  if (castMagicRegenerate()) {
+    magicRegenerateBtn.disabled = true
+    setTimeout(()=> magicRegenerateBtn.disabled = false, 30_000)
+    if (firstRegenerateCast) {
+      delayedNotify(3, 'It will take a half clock turn until you can cast regenerate again.')
+      firstRegenerateCast = false
+    }
+  }
+}
+
+let firstFreezeCast = true
+magicFreezeBtn.onclick = ()=> {
+  if (castMagicFreeze()) {
+    magicFreezeBtn.disabled = true
+    setTimeout(()=> magicFreezeBtn.disabled = false, 60_000)
+    if (firstFreezeCast) {
+      delayedNotify(3, 'It will take a clock turn until you can cast freeze again.')
+      firstFreezeCast = false
+    }
   }
 }
 

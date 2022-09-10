@@ -46,13 +46,13 @@ const tic = ()=> {
     el.tic++
     heroTic(el)
   }
-  for (let el,i=0; el=mapBoids.enemies[i]; i++) {
+  if (!frozen) for (let el,i=0; el=mapBoids.enemies[i]; i++) {
     el.tic++
     enemyTic(el)
   }
   updateFireballs()
   allMapEntities = [...mapBoids.heroes, ...mapBoids.enemies]
-  for (let el,i=0; el=allMapEntities[i]; i++) {
+  for (let el,i=0; el=allMapEntities[i]; i++) if (!frozen || el.isHero) {
     randomizeAndLimitVelocity(el)
     testColision(el)
     testColisionWall(el)
@@ -267,26 +267,45 @@ const testColisionWall = (el)=> {
 }
 
 const castMagicRegenerate = ()=> {
+  const wizards = mapBoids.heroes.filter(el => el.tagName==='M' )
+  if (wizards.length === 0) {
+    notify('You have no wizards.')
+    return false
+  }
   let regenerations = 0
-  mapBoids.heroes.map((wizard)=> {
-    if (wizard.tagName==='M') {
-      log(wizard.id + ' cast Regen...')
-      wizard.classList.add('cast-rgn')
-      setTimeout(()=> wizard.classList.remove('cast-rgn'), 2000)
-      mapBoids.heroes.map((el)=> {
-        const dist = vecSize(vecTo(wizard, el))
-        if (dist < 4 && el.life < el.lifeOrig) {
-          log('Regen!', el.id, el.life)
-          el.life++
-          updateLifeDisplay(el)
-          regenerations++
-        }
-      })
-    }
+  wizards.map((wizard)=> {
+    log(wizard.id + ' cast Regen...')
+    wizard.classList.add('cast-rgn')
+    setTimeout(()=> wizard.classList.remove('cast-rgn'), 2000)
+    mapBoids.heroes.map((el)=> {
+      const dist = vecSize(vecTo(wizard, el))
+      if (dist < 4 && el.life < el.lifeOrig) {
+        log('Regen!', el.id, el.life)
+        el.life++
+        updateLifeDisplay(el)
+        regenerations++
+      }
+    })
   })
   if (regenerations === 0) delayedNotify(1, 'No hero regenerated.')
   else if (regenerations === 1) delayedNotify(1, 'One hero regenerated.')
   else delayedNotify(1, regenerations+' heroes regenerated.')
+  return true
+}
+
+const castMagicFreeze = ()=> {
+  const wizards = mapBoids.heroes.filter(el => el.tagName==='M' )
+  if (wizards.length === 0) {
+    notify('You have no wizards.')
+    return false
+  }
+  frozen = true
+  tableEl.classList.add('frozen')
+  setTimeout(()=> {
+    frozen = false
+    tableEl.classList.remove('frozen')
+  }, 5000)
+  return true
 }
 
 const areEnemies = (el1, el2)=> {
