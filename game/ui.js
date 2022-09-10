@@ -103,6 +103,20 @@ $$('.act button').map(btn =>
 )
 $('.act button:nth-child(2)').click()
 
+const magicRegenerateBtn = $('#magic-rgn')
+const magicFreezeBtn = $('#magic-frz')
+
+let firstRegenerateCast = true
+magicRegenerateBtn.onclick = ()=> {
+  magicRegenerateBtn.disabled = true
+  setTimeout(()=> magicRegenerateBtn.disabled = false, 30_000)
+  castMagicRegenerate()
+  if (firstRegenerateCast) {
+    delayedNotify(3, 'It will take a half clock turn until you can cast regenerate again.')
+    firstRegenerateCast = false
+  }
+}
+
 let notifyY = 45 // Vary the notification position to prevent overlap.
 // step-by-step put the notifyY back to the original position while not used:
 setInterval(()=> notifyY = Math.min(notifyY+1, 45), 1500)

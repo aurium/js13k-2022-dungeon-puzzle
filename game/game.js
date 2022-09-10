@@ -266,6 +266,29 @@ const testColisionWall = (el)=> {
   }
 }
 
+const castMagicRegenerate = ()=> {
+  let regenerations = 0
+  mapBoids.heroes.map((wizard)=> {
+    if (wizard.tagName==='M') {
+      log(wizard.id + ' cast Regen...')
+      wizard.classList.add('cast-rgn')
+      setTimeout(()=> wizard.classList.remove('cast-rgn'), 2000)
+      mapBoids.heroes.map((el)=> {
+        const dist = vecSize(vecTo(wizard, el))
+        if (dist < 4 && el.life < el.lifeOrig) {
+          log('Regen!', el.id, el.life)
+          el.life++
+          updateLifeDisplay(el)
+          regenerations++
+        }
+      })
+    }
+  })
+  if (regenerations === 0) delayedNotify(1, 'No hero regenerated.')
+  else if (regenerations === 1) delayedNotify(1, 'One hero regenerated.')
+  else delayedNotify(1, regenerations+' heroes regenerated.')
+}
+
 const areEnemies = (el1, el2)=> {
   const els = [el1.tagName, el2.tagName].sort().join('')
   return els === 'EU' || els === 'EM'

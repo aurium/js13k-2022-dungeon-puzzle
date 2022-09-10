@@ -23,6 +23,10 @@ body *::before, body *::after {
   display: block;
   position: absolute;
   box-sizing: border-box;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
 }
 
 body button {
@@ -507,6 +511,17 @@ m i {
   transition: .2s, opacity 20s 20s, filter 10s, z-index 1s !important;
 }
 
+m.cast-rgn i::after {
+  background: radial-gradient(transparent 25%, #FF0);
+  left: -3.75em;
+  top: -3.75em;
+  width: 8em;
+  height: 8em;
+  border-radius: 50%;
+  opacity: 0;
+  transition: 1s, opacity 1s .5s, border-radius 0s;
+}
+
 fb { /* Wizard's fireball */
   width: .4em;
   height: .4em;
@@ -552,12 +567,14 @@ article x.show {
 x::before {
   background: #D00;
   width: 4px;
+  height: auto;
   left: 10px;
   top: 0;
   bottom: 0;
 }
 x::after {
   background: #D00;
+  width: auto;
   height: 4px;
   top: 10px;
   left: 0;
