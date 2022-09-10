@@ -29,11 +29,18 @@ const vecOne = (vec, multplier=1)=> {
   }
 }
 
+let isActCraven = false
+let isActDeffen = true
+let isActAggres = false
 let allMapEntities = []
 let hadAHitThisTurn = false
 const tic = ()=> {
   if (gameIsOn) setTimeout(tic, 66)
   debugStats.begin() // DEBUG
+
+  isActCraven = act === 'cra'
+  isActDeffen = act === 'def'
+  isActAggres = act === 'agg'
 
   for (let el,i=0; el=mapBoids.heroes[i]; i++) {
     el.tic++
@@ -119,8 +126,22 @@ const enemyTic = (enemy)=> {
 }
 
 const heroTic = (el)=> {
-  const hasWill = (el.tagName==='M') ? wizardTic(el) : warriorTic(el)
+  const [vec2Enemy, dist, enemy] = nearestEntity(el, mapBoids.enemies, 10)
+  const hasWill = (el.tagName==='M')
+                ? wizardTic(el, vec2Enemy, dist, enemy)
+                : warriorTic(/* useless placeholder */)
   if (!hasWill) {
+    if (vec2Enemy && dist < 8) {
+      const velInc = vecOne(vec2Enemy, .05)
+      if (isActCraven) {
+        el.v.x -= velInc.x
+        el.v.y -= velInc.y
+      }
+      if (isActAggres) {
+        el.v.x += velInc.x
+        el.v.y += velInc.y
+      }
+    }
     let vec2Target = vecTo(el, boidTarget)
     let velocity2Target = vecOne(vec2Target, .03)
     if (vecSize(vec2Target) > 2) {
@@ -137,9 +158,8 @@ const warriorTic = (warrior)=> {
   // Nothing to do.
 }
 
-const wizardTic = (wizard)=> {
+const wizardTic = (wizard, vec2Enemy, dist, enemy)=> {
   let will = false
-  const [vec2Enemy, dist, enemy] = nearestEntity(wizard, mapBoids.enemies, 10)
   if (vec2Enemy) {
     if (dist < 2) {
       const velInc = vecOne(vec2Enemy, .03)
@@ -256,7 +276,7 @@ const hitEntity = (el)=> {
   hadAHitThisTurn = true
   el.life--
   updateLifeDisplay(el)
-  log(el.id, 'Bleed', el.className, el.life)
+  //log(el.id, 'Bleed', el.className, el.life)
   if (el.life <= 0) justKill(el, true)
 }
 

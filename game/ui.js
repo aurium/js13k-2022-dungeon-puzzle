@@ -98,7 +98,7 @@ $$('.act button').map(btn =>
   btn.onclick = ()=> {
     $$('.act button').map(b => b.className='')
     btn.className = 'active'
-    act = btn.innerText
+    act = btn.dataset.act
   }
 )
 $('.act button:nth-child(2)').click()
