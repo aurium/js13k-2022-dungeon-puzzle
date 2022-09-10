@@ -634,8 +634,9 @@ news.win a {
 
 news.win a::before {
   border-top: 2px solid #09D;
+  width: 100%;
   left: 0;
-  right: 0;
+  top: auto;
   bottom: 1px;
   z-index: -1;
 }

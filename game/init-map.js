@@ -120,15 +120,6 @@ function initMap(level) {
     })
   }
 
-  mkPiece('mm-m', 'cavern',
-    '     '+
-    'uu   '+
-    'uu   '+
-    'mu   '+
-    '#####'
-  ).placePiece(puzzleWidth-2, puzzleHeight-1)
-
-
   // Place protection walls. So entities can't escape:
   const halfWidth = puzzleWidth*5/2
   const halfHeight = puzzleHeight*5/2
