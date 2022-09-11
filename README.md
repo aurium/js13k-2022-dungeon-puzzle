@@ -12,8 +12,6 @@ You have 10 available peaces on the left box to drag and place somewhere in the 
 When you place a piece, a new random piece will appear on the available collection, you earn gold and more warriors on each neighbor piece with the same terrain.
 If no available piece matches the place you want, you can pay to replace any one bay some new random piece.
 
-You can't rotate the piece. That will add some difficult to the game.
-
 When your heroes find an enemy, they will fight, unless you change they behavior to "craven".
 When attacked, an entity will bleed, so you can see how near to dead is that unity.
 When you kill an enemy, you earn gold.

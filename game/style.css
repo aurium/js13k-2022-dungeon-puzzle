@@ -242,6 +242,10 @@ p.disabled {
   transform: rotate(9deg) scale(.666);
   cursor: grab;
 }
+#avaliable p.turn90 {
+  transform: rotate(-81deg) scale(.666);
+  transition: .5s;
+}
 #avaliable p.dragging {
   transform: none;
   pointer-events: none;
@@ -255,10 +259,13 @@ body.dragging {
 }
 
 #avaliable button {
+  position: absolute;
+  top: 24px;
+  right: 23px;
   font-size: 16px;
   line-height: 25px;
   width: 28px;
-  padding: 3px 0px 0px 0px;
+  padding: 2px 1px 1px 0px;
   border-radius: 50%;
   border: none;
   text-align: center;
@@ -267,11 +274,20 @@ body.dragging {
   color: #FC0;
   font-weight: bold;
   cursor: pointer;
-  z-index: 5;
+  z-index: 99;
+  transform: rotate(-9deg) scale(1.5);
+  transition: .5s;
+}
+#avaliable button.replace {
+  top: 68px;
+  right: 23px;
 }
 #avaliable button:hover {
   background: #FC0 radial-gradient(#FC0, #FC0, #222, #222);
   color: #222;
+}
+#avaliable p.turn90 button, #avaliable button.hide {
+  transform: rotate(180deg) scale(0);
 }
 
 p f {

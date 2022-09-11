@@ -29,15 +29,36 @@ function onWinResize() {
 window.addEventListener('resize', onWinResize)
 window.addEventListener('load', onWinResize)
 
-function replaceAvaliable(piece, x, y) {
+const replaceAvaliable = (piece, x, y)=> {
   if (gold < 5) {
     return notify('You have not enought gold.')
   }
   notify('Repace '+piece.terrain+' piece for 5 gold coins.')
   addGold(-5)
   piece.remove()
-  piece.btReplace.remove()
   configPieceOption(mkRndPiece(), x, y)
+}
+
+const rotateAvaliable = (piece, x, y)=> {
+  if (gold < 1) {
+    return notify('You have not enought gold.')
+  }
+  piece.classList.add('turn90')
+  const newMap = [ '', '', '', '', '' ]
+  for (let y=0; y<5; y++) for (let x=0; x<5; x++) {
+    newMap[4-x] += piece.map[y][x]
+  }
+  setTimeout(()=> {
+    const newPiece = mkPiece(
+      piece.E+piece.S+piece.W+piece.N,
+      piece.terrain,
+      newMap.join('')
+    )
+    notify('Rotate '+piece.terrain+' piece for 1 gold coins.')
+    addGold(-1)
+    piece.remove()
+    configPieceOption(newPiece, x, y)
+  }, 500)
 }
 
 window.addEventListener('mouseup', endDragAvaliablePiece)

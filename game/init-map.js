@@ -209,14 +209,28 @@ function configPieceOption(p, x, y) {
   p.drag()
   p.addEventListener('mousedown', initDragAvaliablePiece)
   avaliableBox.appendChild(p)
-  p.btReplace = mkEl('button', {
+  p.btRotate = mkEl('button', {
     text: '⭯',
-    parent: avaliableBox,
-    onclick() { replaceAvaliable(p, x, y) },
-    css: {
-      position: 'absolute',
-      left: (70 + 100*x) + 'px',
-      top:  (75 + 90*y) + 'px'
-    }
+    title: 'Rotate',
+    parent: p,
+    class: 'hide',
+    onmousedown(ev) { ev.stopPropagation() },
+    onclick(ev) { ev.stopPropagation(); rotateAvaliable(p, x, y) }
+  })
+  p.btReplace = mkEl('button', {
+    text: '⇆',
+    title: 'Replace',
+    parent: p,
+    class: 'hide replace',
+    onmousedown(ev) { ev.stopPropagation() },
+    onclick(ev) { ev.stopPropagation(); replaceAvaliable(p, x, y) }
+  })
+  p.addEventListener('mouseover', ()=> {
+    p.btRotate.classList.remove('hide')
+    p.btReplace.classList.remove('hide')
+  })
+  p.addEventListener('mouseout', ()=> {
+    p.btRotate.classList.add('hide')
+    p.btReplace.classList.add('hide')
   })
 }
