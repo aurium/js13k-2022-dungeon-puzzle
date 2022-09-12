@@ -65,6 +65,6 @@ It really demands CPU because of high number of elements and filters. To solve t
 
 A button will appear to allow the user to upgrade the graphics if they want, when the FPS returns to normal parameters.
 
-On a old laptop the game performs well on firefox.
+On a old laptop the game performs better on Firefox.
 
 Easy mode is challenging and fun enough.
