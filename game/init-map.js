@@ -13,7 +13,7 @@ function initMap(level) {
     puzzleHeight = 6
     rndEnemyChance = .15
   } else if (level == 'hard') {
-    puzzleWidth = 13
+    puzzleWidth = 12
     puzzleHeight = 7
     rndEnemyChance = .2
   } else {
@@ -95,7 +95,7 @@ function initMap(level) {
   for (let y=.6; y<3.6; y+=.4)
     gridWall.push(placeWall(bossOffsetX+.2, bossOffsetY+y, .3))
   bossPiece.openGrid = ()=> {
-    bossGrid.setStyle({ width: '0em', top: '1em' })
+    bossGrid.setStyle({ width: 0, height: 0, top: '1em' })
     gridWall.map((wall, i)=> setTimeout(()=> {
       playTone(60,  .00, 1.0, .1)
       playTone(110, .00, 1.0, .1)
@@ -225,12 +225,20 @@ function configPieceOption(p, x, y) {
     onmousedown(ev) { ev.stopPropagation() },
     onclick(ev) { ev.stopPropagation(); replaceAvaliable(p, x, y) }
   })
-  p.addEventListener('mouseover', ()=> {
+  const optMouseOver = ()=> {
     p.btRotate.classList.remove('hide')
     p.btReplace.classList.remove('hide')
-  })
-  p.addEventListener('mouseout', ()=> {
+  }
+  const optMouseOut = ()=> {
     p.btRotate.classList.add('hide')
     p.btReplace.classList.add('hide')
-  })
+  }
+  p.addEventListener('mouseover', optMouseOver)
+  p.addEventListener('mouseout', optMouseOut)
+  p.removeOptBtns = ()=> {
+    p.btRotate.remove()
+    p.btReplace.remove()
+    p.removeEventListener('mouseover', optMouseOver)
+    p.removeEventListener('mouseout', optMouseOut)
+  }
 }

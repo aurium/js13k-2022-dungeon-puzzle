@@ -14,6 +14,9 @@ clock {
     -5px 8px 20px #000;
   z-index: 6;
 }
+.slow clock {
+  background: #DDD;
+}
 clock::before {
   width: 100%;
   height: 100%;
@@ -64,8 +67,12 @@ clock cp.shadow {
   filter: blur(4px);
   z-index: 4;
 }
+.slow clock cp.shadow {
+  display: none;
+}
 
-clock cp::before {
+clock cp::before,
+.slow clock cp::before {
   position: absolute;
   width: 0;
   height: 0;

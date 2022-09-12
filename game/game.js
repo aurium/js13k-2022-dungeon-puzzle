@@ -29,14 +29,49 @@ const vecOne = (vec, multplier=1)=> {
   }
 }
 
+window.forceGraphicUp = ()=> {
+  log('Force graphics upgrade.')
+  body.classList.remove('slow')
+  upgradedGraphcsTime = Date.now()
+  shouldDowngradeGraphics = 0
+}
+
 let isActCraven = false
 let isActDeffen = true
 let isActAggres = false
 let allMapEntities = []
 let hadAHitThisTurn = false
+let lastTime = Infinity
+let ticCounter = 0
+let shouldDowngradeGraphics = 0
+let shouldUpgradeGraphics = 0
+let upgradedGraphcsTime = 0
 const tic = ()=> {
-  if (gameIsOn) setTimeout(tic, 66)
   debugStats.begin() // DEBUG
+  if (gameIsOn) setTimeout(tic, 66)
+
+  ticCounter++
+  if (ticCounter%8 === 0) {
+    const now = Date.now()
+    const frameDelay = (now - lastTime) / 8
+    lastTime = now
+    if (frameDelay > 142 /* 6.999- FPS */) {
+      console.log('FPS is low:', 1000/frameDelay)
+      if (upgradedGraphcsTime < (now-10_000) && realStartTime < (now-40_000)) {
+        $('#forceGraphBtn').classList.remove('show')
+        shouldDowngradeGraphics++
+        if (shouldDowngradeGraphics > 3) {
+          body.classList.add('slow')
+          shouldUpgradeGraphics = 0
+        }
+      }
+    }
+    if (frameDelay < 70 /* 14.285+ FPS */) {
+      if (++shouldUpgradeGraphics > 10) {
+        $('#forceGraphBtn').classList.add('show')
+      }
+    }
+  }
 
   isActCraven = act === 'cra'
   isActDeffen = act === 'def'
@@ -374,7 +409,7 @@ const youWin = ()=> {
     ` #js13k`
   )
   notification.innerHTML += `<br>
-  <a href="https://twitter.com/intent/tweet?text=${tweet}">Share with your friends <b>🐦</b></a>
+  <a target="_blank" href="https://twitter.com/intent/tweet?text=${tweet}">Share with your friends <b>🐦</b></a>
   `
   gameEnded()
 }

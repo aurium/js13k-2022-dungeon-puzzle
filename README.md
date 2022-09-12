@@ -54,3 +54,15 @@ Sheet
 -----
 
 Run `addGold(<num>)` in the browser console the help your fight.
+
+
+Performance
+-----------
+
+It really demands CPU because of high number of elements and filters. To solve the low FPS problem, it automatically drops the graphics quality to a simpler renderization when the FPS is bellow 7 (8 is acceptable for tis kind of game/animation).
+
+A button will appear to allow the user to upgrade the graphics if they want, when the FPS returns to normal parameters.
+
+On a old laptop the game performs well on firefox.
+
+Easy mode is challenging and fun enough.

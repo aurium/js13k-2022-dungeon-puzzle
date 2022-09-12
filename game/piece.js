@@ -127,8 +127,9 @@ function mkPiece(conn, terrain, map) {
  * Capture piece click to define a target to hero boids to follow.
  */
 function clickOnPlacedPiece(ev) {
-  boidTarget.x = ev.target.parentNode.x*5 + ev.layerX/20 -.5
-  boidTarget.y = ev.target.parentNode.y*5 + ev.layerY/20 -.5
+  const piece = ev.target
+  boidTarget.x = piece.x*5 + ev.layerX/20 -.5
+  boidTarget.y = piece.y*5 + ev.layerY/20 -.5
   log('Update target:', boidTarget.x, boidTarget.y)
   boidTarget.onupdate()
   boidTarget.className = 'show'
@@ -158,6 +159,7 @@ function placePiece(px, py, enabled=true) {
   tableTop.appendChild(this)
   this.x = px
   this.y = py
+  this.removeOptBtns && this.removeOptBtns()
   placedPieces[py][px] = this
   if (enabled) {
     addGold(1)

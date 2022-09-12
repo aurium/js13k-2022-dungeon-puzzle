@@ -8,9 +8,26 @@ body {
   font-family: "Liberation Serif", "Times New Roman", serif;
   font-size: 18px;
 }
+.slow::before {
+  content: "Lowered graphics due to low FPS.";
+  display: block;
+  margin: 9px 20px;
+  color: #666;
+}
 button, input {
   font-family: inherit;
   font-size: inherit;
+}
+
+#forceGraphBtn {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 9999;
+}
+.slow #forceGraphBtn.show {
+  display: block;
 }
 
 body * {
@@ -27,6 +44,12 @@ body *::before, body *::after {
   top: 0;
   width: 0;
   height: 0;
+}
+.slow *:not(cp)::before, .slow *:not(cp)::after {
+  display: none;
+}
+.slow * {
+  box-shadow: none;
 }
 
 body button {
@@ -63,7 +86,7 @@ btG button:last-child {
   padding-right: 10px;
 }
 
-ctrl {
+ctrl, .slow ctrl {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -156,6 +179,9 @@ article {
 article > div, #avaliable {
   filter: drop-shadow(.01em .01em .02em rgba(0,0,0,.9));
 }
+.slow article > div, .slow #avaliable {
+  filter: none;
+}
 article > :is(div, ul) {
   position: absolute;
   width: calc(var(--pW)*100px);
@@ -233,9 +259,17 @@ article p, #avaliable p {
   filter: sepia(0) hue-rotate(0) blur(0) grayscale(0);
   transition: 2s, filter 1.3s;
 }
+.slow article p, .slow #avaliable p {
+  filter: none;
+  background-image: none;
+}
 
-p.disabled {
+p.disabled, .slow p.disabled {
   filter: sepia(0) hue-rotate(0) blur(.02em) grayscale(1);
+}
+
+p *:not(button) {
+  pointer-events: none;
 }
 
 #avaliable p {
@@ -299,6 +333,9 @@ p f {
   mix-blend-mode: hard-light;
   z-index: 50;
 }
+.slow p f {
+  display: none;
+}
 f::before, f::after {
   width: 100%;
   height: 100%;
@@ -312,7 +349,7 @@ f::after {
 }
 
 p.building {
-  background: 10px 10px linear-gradient(-45deg, #777, #999);
+  background: #999 10px 10px linear-gradient(-45deg, #777, #999);
   background-size: 20px 20px;
 }
 p.woods    {
@@ -352,6 +389,9 @@ map > * {
 map w {
   z-index: 10;
 }
+.slow map w i {
+  display: none;
+}
 
 .building map :is(w, w i)::before, .building map :is(w, w i)::after {
   width: .5em;
@@ -367,16 +407,25 @@ map w {
 .building map w i::before, .building map w i::after {
   top: .5em;
 }
+.slow .building map w {
+  background: #744;
+}
 
 .woods map w i, .woods map :is(w, w i)::before, .woods map :is(w, w i)::after {
   border-radius: 50%;
   position: absolute;
   background: radial-gradient(at 30% 30%, #480, #010);
 }
+.slow .woods map w {
+  background: #250;
+}
 .cavern map w i, .cavern map :is(w, w i)::before, .cavern map :is(w, w i)::after {
   border-radius: .2em;
   position: absolute;
   background: radial-gradient(at 30% 30%, #433, #111);
+}
+.slow .cavern map w {
+  background: #322;
 }
 
 :is(.woods, .cavern) map w::before {
@@ -413,6 +462,9 @@ map w {
 
 #avaliable e {
   filter: blur(.1em) grayscale(.8);
+}
+.slow #avaliable e, .slow #avaliable e i {
+  filter: none;
 }
 
 :is(u,m,e) i {
@@ -485,6 +537,9 @@ m i {
   background: radial-gradient(at 30% 30%, #CCC, #000);
   box-shadow: 0 0 .3em #FE0, 0 0 .3em #FE0;
 }
+.slow m i {
+  box-shadow: none;
+}
 
 :is(u,m,e) i::before {
   top: 50%;
@@ -530,7 +585,14 @@ m i {
   z-index: 1;
   transition: .2s, opacity 20s 20s, filter 10s, z-index 1s !important;
 }
+.slow :is(u,m,e).life0 {
+  filter: none;
+}
 
+.slow m i::after {
+  display: block;
+  opacity: 1;
+}
 m.cast-rgn i::after {
   background: radial-gradient(transparent 25%, #FF0);
   left: -3.75em;
@@ -560,6 +622,9 @@ fb::after {
   border-radius: 50%;
   background: radial-gradient(#FF0,#F80, rgba(255,0,0,.5),transparent 70%);
 }
+.slow fb::after {
+  display: block;
+}
 fb.boom::before {
   display: none;
 }
@@ -584,7 +649,8 @@ article x.show {
   opacity: 1;
   transition: 0s;
 }
-x::before {
+body.slow x::before, x::before {
+  display: block;
   background: #D00;
   width: 4px;
   height: auto;
@@ -592,7 +658,8 @@ x::before {
   top: 0;
   bottom: 0;
 }
-x::after {
+body.slow x::after, x::after {
+  display: block;
   background: #D00;
   width: auto;
   height: 4px;
@@ -612,7 +679,7 @@ grid {
   border: 2px dotted #322;
   border-right: none;
   filter: drop-shadow(-1px -1px #666);
-  transition: width 1.5s linear, top 1.5s 1.5s linear;
+  transition: width 1.5s linear, height 1.5s 1.5s linear, top 1.5s 1.5s linear;
 }
 
 news {
