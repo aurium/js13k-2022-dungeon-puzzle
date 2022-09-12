@@ -3,6 +3,8 @@ Dungeon Puzzle
 Created to JS13kGames Competition 2022.  
 https://js13kgames.com/entries/dungeon-puzzle
 
+![Alt text](dungeon-puzzle.preview.png)
+
 Gameplay
 --------
 
